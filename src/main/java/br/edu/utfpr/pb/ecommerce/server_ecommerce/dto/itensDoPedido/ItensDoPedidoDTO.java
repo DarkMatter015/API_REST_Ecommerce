@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ItensDoPedidoRequestDTO {
+public class ItensDoPedidoDTO {
 
     private Pedido pedido;
 

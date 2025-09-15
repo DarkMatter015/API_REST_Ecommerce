@@ -14,20 +14,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("usuarios")
 public class UsuarioController extends RequestController<Usuario, UsuarioRequestDTO, Long> {
-    private final IUsuarioRequestService usuarioService;
+    private final IUsuarioRequestService usuarioRequestService;
     private final IUsuarioResponseService usuarioResponseService;
     private final ModelMapper modelMapper;
 
-    public UsuarioController(IUsuarioRequestService usuarioService, IUsuarioResponseService usuarioResponseService, ModelMapper modelMapper) {
+    public UsuarioController(IUsuarioRequestService usuarioRequestService, IUsuarioResponseService usuarioResponseService, ModelMapper modelMapper) {
         super(Usuario.class, UsuarioRequestDTO.class);
-        this.usuarioService = usuarioService;
+        this.usuarioRequestService = usuarioRequestService;
         this.usuarioResponseService = usuarioResponseService;
         this.modelMapper = modelMapper;
     }
 
     @Override
     protected ICrudRequestService<Usuario, Long> getService() {
-        return usuarioService;
+        return usuarioRequestService;
     }
 
     @Override

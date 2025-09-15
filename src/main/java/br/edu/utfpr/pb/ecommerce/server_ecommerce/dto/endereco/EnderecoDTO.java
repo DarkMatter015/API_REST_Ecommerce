@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EnderecoRequestDTO {
+public class EnderecoDTO {
 
     private int id;
 

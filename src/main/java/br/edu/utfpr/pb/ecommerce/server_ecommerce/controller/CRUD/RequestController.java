@@ -35,7 +35,6 @@ public abstract class RequestController<T, D, ID extends Serializable> {
     @PostMapping
     public ResponseEntity<D> create(@RequestBody @Valid D entity) {
         return ResponseEntity.status(HttpStatus.CREATED).body(convertToDto(getService().save(convertToEntity(entity))));
-
     }
 
     @PutMapping("{id}")
