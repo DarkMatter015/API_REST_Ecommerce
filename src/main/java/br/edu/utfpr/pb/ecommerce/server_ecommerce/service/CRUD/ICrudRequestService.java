@@ -1,0 +1,17 @@
+package br.edu.utfpr.pb.ecommerce.server_ecommerce.service.CRUD;
+
+import java.io.Serializable;
+
+public interface ICrudRequestService<T, ID extends Serializable>{
+    T save(T entity);
+
+    T saveAndFlush(T entity);
+
+    Iterable<T> save(Iterable<T> iterable);
+
+    void deleteById(ID id);
+
+    void delete(Iterable<? extends T> iterable);
+
+    void deleteAll();
+}

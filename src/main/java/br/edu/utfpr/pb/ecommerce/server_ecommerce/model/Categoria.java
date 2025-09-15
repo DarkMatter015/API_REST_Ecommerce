@@ -1,0 +1,24 @@
+package br.edu.utfpr.pb.ecommerce.server_ecommerce.model;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.*;
+
+@Entity
+@Table(name = "tb_categoria")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class Categoria {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @NotNull
+    @Size(min = 4, max = 255)
+    private String nome;
+}
