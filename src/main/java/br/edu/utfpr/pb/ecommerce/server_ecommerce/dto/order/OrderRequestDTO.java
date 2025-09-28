@@ -1,0 +1,21 @@
+package br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.order;
+
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.orderItems.OrderItemsRequestDTO;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class OrderRequestDTO {
+
+    @NotNull
+    private Long userId;
+
+    @NotNull
+    private List<OrderItemsRequestDTO> orderItems;
+}

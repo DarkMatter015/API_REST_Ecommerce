@@ -1,6 +1,6 @@
 package br.edu.utfpr.pb.ecommerce.server_ecommerce.service.impl.CRUD;
 
-import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.CRUD.ICrudRequestService;
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.ICRUD.ICrudRequestService;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.io.Serializable;
