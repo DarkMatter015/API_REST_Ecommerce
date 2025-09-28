@@ -28,8 +28,8 @@ public class WriteOrderController {
     }
 
     @PostMapping
-    public ResponseEntity<OrderResponseDTO> createPedido(@RequestBody @Valid OrderRequestDTO pedidoDTO) {
-        Order orderSalvo = pedidoRequestService.createPedido(pedidoDTO);
+    public ResponseEntity<OrderResponseDTO> createPedido(@RequestBody @Valid OrderRequestDTO orderDTO) {
+        Order orderSalvo = pedidoRequestService.createOrder(orderDTO);
         OrderResponseDTO responseDTO = pedidoResponseService.convertToDTO(orderSalvo, modelMapper);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);

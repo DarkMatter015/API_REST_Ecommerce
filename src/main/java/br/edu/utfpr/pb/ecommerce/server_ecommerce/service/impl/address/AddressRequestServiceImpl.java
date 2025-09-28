@@ -1,5 +1,6 @@
 package br.edu.utfpr.pb.ecommerce.server_ecommerce.service.impl.address;
 
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.address.AddressRequestDTO;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.Address;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.User;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.repository.AddressRepository;
@@ -26,11 +27,44 @@ public class AddressRequestServiceImpl extends CrudRequestServiceImpl<Address, L
         return addressRepository;
     }
 
-    @Override
-    public Address save(Address address) {
-        String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-        User user = userRepository.findByEmail(email);
+    public Address createAddres(AddressRequestDTO addressDTO) {
+        Address address = new Address();
+
+        String name = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        User user = userRepository.findUsuarioByUsername(name);
         address.setUser(user);
+        address.setStreet(addressDTO.getStreet());
+        address.setNumber(addressDTO.getNumber());
+        address.setComplement(addressDTO.getComplement());
+        address.setNeighborhood(addressDTO.getNeighborhood());
+        address.setCity(addressDTO.getCity());
+        address.setState(addressDTO.getState());
+        address.setCep(addressDTO.getCep());
+
         return super.save(address);
+    }
+
+    @Override
+    public User getAuthenticatedUser() {
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findUsuarioByUsername(name);
+    }
+
+    @Override
+    public void deleteAll() {
+        User user = getAuthenticatedUser();
+        addressRepository.deleteAllByUser(user);
+    }
+
+    @Override
+    public void deleteById(Long aLong) {
+        User user = getAuthenticatedUser();
+        addressRepository.deleteByIdAndUser(aLong, user);
+    }
+
+    @Override
+    public void delete(Iterable<? extends Address> iterable) {
+        User user = getAuthenticatedUser();
+        addressRepository.deleteAllByUserAndIdIn(user, iterable);
     }
 }

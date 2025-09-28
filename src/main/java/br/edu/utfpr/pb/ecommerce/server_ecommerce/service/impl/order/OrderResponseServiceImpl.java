@@ -4,11 +4,18 @@ import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.orderItems.OrderItemsRespo
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.order.OrderResponseDTO;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.product.ProductDTO;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.Order;
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.Order;
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.User;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.repository.OrderRepository;
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.repository.UserRepository;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.IOrder.IOrderResponseService;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.impl.CRUD.CrudResponseServiceImpl;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,9 +24,11 @@ import java.util.List;
 public class OrderResponseServiceImpl extends CrudResponseServiceImpl<Order, Long> implements IOrderResponseService {
 
     private final OrderRepository orderRepository;
+    private final UserRepository userRepository;
 
-    public OrderResponseServiceImpl(OrderRepository orderRepository) {
+    public OrderResponseServiceImpl(OrderRepository orderRepository, UserRepository userRepository) {
         this.orderRepository = orderRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -47,5 +56,48 @@ public class OrderResponseServiceImpl extends CrudResponseServiceImpl<Order, Lon
             responseDTO.setOrderItems(itensResponse);
 
             return responseDTO;
+    }
+
+    @Override
+    public User getAuthenticatedUser() {
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findUsuarioByUsername(name);
+    }
+
+    @Override
+    public List<Order> findAll() {
+        User user = getAuthenticatedUser();
+        return orderRepository.findAllByUser(user);
+    }
+
+    @Override
+    public List<Order> findAll(Sort sort) {
+        User user = getAuthenticatedUser();
+        return orderRepository.findAllByUser(user, sort);
+    }
+
+    @Override
+    public Page<Order> findAll(Pageable pageable) {
+        User user = getAuthenticatedUser();
+        return orderRepository.findAllByUser(user, pageable);
+    }
+
+    @Override
+    public Order findById(Long id) {
+        User user = getAuthenticatedUser();
+        return orderRepository.findByIdAndUser(id, user)
+                .orElseThrow(() -> new RuntimeException("Endereço não encontrado para este usuário"));
+    }
+
+    @Override
+    public boolean exists(Long id) {
+        User user = getAuthenticatedUser();
+        return orderRepository.existsByUserAndId(user, id);
+    }
+
+    @Override
+    public long count() {
+        User user = getAuthenticatedUser();
+        return orderRepository.countByUser(user);
     }
 }

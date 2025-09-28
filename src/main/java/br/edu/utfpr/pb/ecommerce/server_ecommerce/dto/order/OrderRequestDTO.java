@@ -14,8 +14,5 @@ import java.util.List;
 public class OrderRequestDTO {
 
     @NotNull
-    private Long userId;
-
-    @NotNull
     private List<OrderItemsRequestDTO> orderItems;
 }

@@ -1,15 +1,14 @@
 package br.edu.utfpr.pb.ecommerce.server_ecommerce.service.impl.order;
 
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.order.OrderRequestDTO;
-import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.OrderItems;
-import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.Order;
-import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.Product;
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.*;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.repository.OrderRepository;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.repository.ProductRepository;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.repository.UserRepository;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.impl.CRUD.CrudRequestServiceImpl;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.IOrder.IOrderRequestService;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -33,10 +32,12 @@ public class OrderRequestServiceImpl extends CrudRequestServiceImpl<Order, Long>
         return orderRepository;
     }
 
-    public Order createPedido(OrderRequestDTO dto) {
+    @Override
+    public Order createOrder(OrderRequestDTO dto) {
         Order order = new Order();
-        order.setUser(userRepository.findById(dto.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado")));
+        String name = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        User user = userRepository.findUsuarioByUsername(name);
+        order.setUser(user);
         order.setData(LocalDateTime.now());
 
         List<OrderItems> itens = dto.getOrderItems().stream().map(itemDTO -> {
@@ -54,5 +55,29 @@ public class OrderRequestServiceImpl extends CrudRequestServiceImpl<Order, Long>
         order.setOrderItems(itens);
 
         return orderRepository.save(order);
+    }
+
+    @Override
+    public User getAuthenticatedUser() {
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findUsuarioByUsername(name);
+    }
+
+    @Override
+    public void deleteAll() {
+        User user = getAuthenticatedUser();
+        orderRepository.deleteAllByUser(user);
+    }
+
+    @Override
+    public void deleteById(Long aLong) {
+        User user = getAuthenticatedUser();
+        orderRepository.deleteByIdAndUser(aLong, user);
+    }
+
+    @Override
+    public void delete(Iterable<? extends Order> iterable) {
+        User user = getAuthenticatedUser();
+        orderRepository.deleteAllByUserAndIdIn(user, iterable);
     }
 }

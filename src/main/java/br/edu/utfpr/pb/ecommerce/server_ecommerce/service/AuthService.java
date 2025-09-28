@@ -28,4 +28,12 @@ public class AuthService implements UserDetailsService {
         return user;
     }
 
+    public UserDetails loadUserByEmail(String email) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new UsernameNotFoundException("Usuário não encontrado!");
+        }
+        return user;
+    }
+
 }

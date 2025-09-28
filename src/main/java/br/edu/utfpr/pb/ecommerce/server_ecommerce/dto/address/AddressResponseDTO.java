@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 public class AddressResponseDTO {
     private Long id;
 
-    private UserResponseDTO usuario;
+    private UserResponseDTO user;
 
     private String street;
 
