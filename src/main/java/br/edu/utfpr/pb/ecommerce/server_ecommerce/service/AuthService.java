@@ -2,9 +2,7 @@ package br.edu.utfpr.pb.ecommerce.server_ecommerce.service;
 
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.User;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.repository.UserRepository;
-import br.edu.utfpr.pb.ecommerce.server_ecommerce.security.SecurityConstants;
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -28,12 +26,8 @@ public class AuthService implements UserDetailsService {
         return user;
     }
 
-    public UserDetails loadUserByEmail(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email);
-        if (user == null) {
-            throw new UsernameNotFoundException("Usuário não encontrado!");
-        }
-        return user;
+    public User getAuthenticatedUser() {
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findUsuarioByUsername(name);
     }
-
 }

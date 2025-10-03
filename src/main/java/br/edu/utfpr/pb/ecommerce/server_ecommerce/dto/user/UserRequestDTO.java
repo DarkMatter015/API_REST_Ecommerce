@@ -1,5 +1,6 @@
 package br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.user;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -16,6 +17,7 @@ public class UserRequestDTO {
 
     @NotNull
     @Size(min = 4, max = 255)
+    @Email
     private String email;
 
     @NotNull
@@ -26,6 +28,5 @@ public class UserRequestDTO {
     @Size(min = 6)
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).*$")
     private String password;
-
 
 }

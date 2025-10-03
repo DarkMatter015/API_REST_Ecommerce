@@ -17,20 +17,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("orders")
 public class WriteOrderController {
-    private final OrderRequestServiceImpl pedidoRequestService;
-    private final OrderResponseServiceImpl pedidoResponseService;
+    private final OrderRequestServiceImpl orderRequestService;
+    private final OrderResponseServiceImpl orderResponseService;
     private final ModelMapper modelMapper;
 
-    public WriteOrderController(OrderRequestServiceImpl pedidoRequestService, OrderResponseServiceImpl pedidoResponseService, ModelMapper modelMapper){
-        this.pedidoRequestService = pedidoRequestService;
-        this.pedidoResponseService = pedidoResponseService;
+    public WriteOrderController(OrderRequestServiceImpl orderRequestService, OrderResponseServiceImpl orderResponseService, ModelMapper modelMapper){
+        this.orderRequestService = orderRequestService;
+        this.orderResponseService = orderResponseService;
         this.modelMapper = modelMapper;
     }
 
     @PostMapping
     public ResponseEntity<OrderResponseDTO> createPedido(@RequestBody @Valid OrderRequestDTO orderDTO) {
-        Order orderSalvo = pedidoRequestService.createOrder(orderDTO);
-        OrderResponseDTO responseDTO = pedidoResponseService.convertToDTO(orderSalvo, modelMapper);
+        Order orderSalvo = orderRequestService.createOrder(orderDTO);
+        OrderResponseDTO responseDTO = orderResponseService.convertToDTO(orderSalvo, modelMapper);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }

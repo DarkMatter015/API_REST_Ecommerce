@@ -1,8 +1,6 @@
 package br.edu.utfpr.pb.ecommerce.server_ecommerce.service.impl.user;
 
-import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.address.AddressResponseDTO;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.user.UserResponseDTO;
-import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.Address;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.User;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.repository.UserRepository;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.impl.CRUD.CrudResponseServiceImpl;

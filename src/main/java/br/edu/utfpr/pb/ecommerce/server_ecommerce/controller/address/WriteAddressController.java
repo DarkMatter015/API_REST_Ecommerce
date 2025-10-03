@@ -3,9 +3,7 @@ package br.edu.utfpr.pb.ecommerce.server_ecommerce.controller.address;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.controller.CRUD.WriteController;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.address.AddressRequestDTO;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.address.AddressResponseDTO;
-import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.order.OrderResponseDTO;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.Address;
-import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.Order;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.ICRUD.ICrudRequestService;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.ICRUD.ICrudResponseService;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.IAddress.IAddressRequestService;
@@ -21,25 +19,25 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("address")
 public class WriteAddressController extends WriteController<Address, AddressRequestDTO, AddressResponseDTO, Long> {
-    private final IAddressRequestService enderecoRequestService;
-    private final IAddressResponseService enderecoResponseService;
+    private final IAddressRequestService addressRequestService;
+    private final IAddressResponseService addressResponseService;
     private final ModelMapper modelMapper;
 
-    public WriteAddressController(IAddressRequestService enderecoRequestService, IAddressResponseService enderecoResponseService, ModelMapper modelMapper) {
+    public WriteAddressController(IAddressRequestService addressRequestService, IAddressResponseService addressResponseService, ModelMapper modelMapper) {
         super(Address.class, AddressRequestDTO.class, AddressResponseDTO.class);
-        this.enderecoRequestService = enderecoRequestService;
-        this.enderecoResponseService = enderecoResponseService;
+        this.addressRequestService = addressRequestService;
+        this.addressResponseService = addressResponseService;
         this.modelMapper = modelMapper;
     }
 
     @Override
     protected ICrudRequestService<Address, Long> getService() {
-        return enderecoRequestService;
+        return addressRequestService;
     }
 
     @Override
     protected ICrudResponseService<Address, Long> getResponseService() {
-        return enderecoResponseService;
+        return addressResponseService;
     }
 
     @Override
@@ -50,8 +48,8 @@ public class WriteAddressController extends WriteController<Address, AddressRequ
     @Override
     public ResponseEntity<AddressResponseDTO> create(@RequestBody @Valid AddressRequestDTO address) {
 
-        Address addressSalvo = enderecoRequestService.createAddres(address);
-        AddressResponseDTO responseDTO = enderecoResponseService.convertToDTO(addressSalvo, modelMapper);
+        Address addressSalvo = addressRequestService.createAddres(address);
+        AddressResponseDTO responseDTO = addressResponseService.convertToDTO(addressSalvo, modelMapper);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }

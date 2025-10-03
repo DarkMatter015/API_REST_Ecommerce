@@ -9,26 +9,25 @@ import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.User;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.repository.OrderItemsRepository;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.repository.OrderRepository;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.repository.ProductRepository;
-import br.edu.utfpr.pb.ecommerce.server_ecommerce.repository.UserRepository;
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.AuthService;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.IOrderItems.IOrderItemsRequestService;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.impl.CRUD.CrudRequestServiceImpl;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class OrderItemsRequestServiceImpl extends CrudRequestServiceImpl<OrderItems, Long> implements IOrderItemsRequestService {
 
     private final OrderItemsRepository orderItemsRepository;
-    private final UserRepository userRepository;
     private final ProductRepository productRepository;
     private final OrderRepository orderRepository;
+    private final AuthService authService;
 
-    public OrderItemsRequestServiceImpl(OrderItemsRepository orderItemsRepository, UserRepository userRepository, ProductRepository productRepository, OrderRepository orderRepository) {
+    public OrderItemsRequestServiceImpl(OrderItemsRepository orderItemsRepository, ProductRepository productRepository, OrderRepository orderRepository, AuthService authService) {
         this.orderItemsRepository = orderItemsRepository;
-        this.userRepository = userRepository;
         this.productRepository = productRepository;
         this.orderRepository = orderRepository;
+        this.authService = authService;
     }
 
     @Override
@@ -36,21 +35,13 @@ public class OrderItemsRequestServiceImpl extends CrudRequestServiceImpl<OrderIt
         return orderItemsRepository;
     }
 
-    @Override
-    public User getAuthenticatedUser() {
-        String name = SecurityContextHolder.getContext().getAuthentication().getName();
-        return userRepository.findUsuarioByUsername(name);
-    }
-
     public OrderItems adicionarItem(OrderItemsRequestDTO dto) {
-        User user = getAuthenticatedUser();
+        User user = authService.getAuthenticatedUser();
         Order order = orderRepository.findByIdAndUser(dto.getOrderId(), user)
                 .orElseThrow(() -> new IllegalArgumentException("Order não encontrado"));
 
-
         Product product = productRepository.findById(dto.getProductId())
                 .orElseThrow(() -> new IllegalArgumentException("Product não encontrado"));
-
 
         OrderItems item = new OrderItems();
         item.setOrder(order);
@@ -58,15 +49,13 @@ public class OrderItemsRequestServiceImpl extends CrudRequestServiceImpl<OrderIt
         item.setQuantity(dto.getQuantity());
         item.calculateTotalPrice();
 
-
         order.addItem(item);
-
 
         return orderItemsRepository.save(item);
     }
 
     public OrderItems atualizarItem(OrderItemsUpdateDTO dto) {
-        User user = getAuthenticatedUser();
+        User user = authService.getAuthenticatedUser();
         OrderItems item = orderItemsRepository.findByIdAndOrder_User_Id(dto.getId(), user.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Item não encontrado"));
 
@@ -79,7 +68,7 @@ public class OrderItemsRequestServiceImpl extends CrudRequestServiceImpl<OrderIt
     }
 
     public void deletarItem(Long id) {
-        User user = getAuthenticatedUser();
+        User user = authService.getAuthenticatedUser();
         OrderItems item = orderItemsRepository.findByIdAndOrder_User_Id(id, user.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Item não encontrado"));
 

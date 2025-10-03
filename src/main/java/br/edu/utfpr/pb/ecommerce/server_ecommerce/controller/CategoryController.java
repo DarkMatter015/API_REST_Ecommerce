@@ -13,18 +13,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("categories")
 public class CategoryController extends ReadController<Category, CategoryDTO, Long> {
-    private final ICategoryResponseService categoriaResponseService;
+    private final ICategoryResponseService categoryResponseService;
     private final ModelMapper modelMapper;
 
-    public CategoryController(ICategoryResponseService categoriaResponseService, ModelMapper modelMapper) {
+    public CategoryController(ICategoryResponseService categoryResponseService, ModelMapper modelMapper) {
         super(CategoryDTO.class);
-        this.categoriaResponseService = categoriaResponseService;
+        this.categoryResponseService = categoryResponseService;
         this.modelMapper = modelMapper;
     }
 
     @Override
     protected ICrudResponseService<Category, Long> getService() {
-        return categoriaResponseService;
+        return categoryResponseService;
     }
 
     @Override

@@ -27,14 +27,17 @@ public class Address {
     @Size(min = 3, max = 255)
     private String street;
 
+    @NotNull
     private String number;
 
     private String complement;
 
     private String neighborhood;
 
+    @NotNull
     private String city;
 
+    @NotNull
     private String state;
 
     private String cep;

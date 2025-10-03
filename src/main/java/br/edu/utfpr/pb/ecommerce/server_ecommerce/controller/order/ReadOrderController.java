@@ -12,18 +12,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("orders")
 public class ReadOrderController extends ReadController<Order, OrderResponseDTO, Long> {
-    private final IOrderResponseService pedidoResponseService;
+    private final IOrderResponseService orderResponseService;
     private final ModelMapper modelMapper;
 
-    public ReadOrderController(IOrderResponseService pedidoResponseService, ModelMapper modelMapper) {
+    public ReadOrderController(IOrderResponseService orderResponseService, ModelMapper modelMapper) {
         super(OrderResponseDTO.class);
-        this.pedidoResponseService = pedidoResponseService;
+        this.orderResponseService = orderResponseService;
         this.modelMapper = modelMapper;
     }
 
     @Override
     protected ICrudResponseService<Order, Long> getService() {
-        return pedidoResponseService;
+        return orderResponseService;
     }
 
     @Override

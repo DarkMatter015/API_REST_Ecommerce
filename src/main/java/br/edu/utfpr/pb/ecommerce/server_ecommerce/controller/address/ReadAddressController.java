@@ -13,18 +13,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("address")
 public class ReadAddressController extends ReadController<Address, AddressResponseDTO, Long> {
-    private final IAddressResponseService enderecoResponseService;
+    private final IAddressResponseService addressResponseService;
     private final ModelMapper modelMapper;
 
-    public ReadAddressController(IAddressResponseService enderecoResponseService, ModelMapper modelMapper) {
+    public ReadAddressController(IAddressResponseService addressResponseService, ModelMapper modelMapper) {
         super(AddressResponseDTO.class);
-        this.enderecoResponseService = enderecoResponseService;
+        this.addressResponseService = addressResponseService;
         this.modelMapper = modelMapper;
     }
 
     @Override
     protected ICrudResponseService<Address, Long> getService() {
-        return enderecoResponseService;
+        return addressResponseService;
     }
 
     @Override

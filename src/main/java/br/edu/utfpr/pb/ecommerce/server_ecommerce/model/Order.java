@@ -24,6 +24,7 @@ public class Order {
     @NotNull
     private LocalDateTime data = LocalDateTime.now();
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

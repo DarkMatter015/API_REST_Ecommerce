@@ -6,9 +6,6 @@ import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.ICRUD.ICrudRequestServ
 import org.modelmapper.ModelMapper;
 
 public interface IUserRequestService extends ICrudRequestService<User, Long> {
-
-    User getAuthenticatedUser();
-
     User updateUser(Long aLong, UserRequestDTO entity, ModelMapper modelMapper);
     void deleteUser(Long aLong);
 }

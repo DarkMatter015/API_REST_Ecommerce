@@ -3,24 +3,25 @@ package br.edu.utfpr.pb.ecommerce.server_ecommerce.service.impl.user;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.user.UserRequestDTO;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.User;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.repository.UserRepository;
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.AuthService;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.IUser.IUserRequestService;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.impl.CRUD.CrudRequestServiceImpl;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 
 @Service
 public class UserRequestServiceImpl extends CrudRequestServiceImpl<User, Long> implements IUserRequestService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final AuthService authService;
 
-    public UserRequestServiceImpl(UserRepository userRepository) {
+    public UserRequestServiceImpl(UserRepository userRepository, AuthService authService) {
         this.userRepository = userRepository;
+        this.authService = authService;
         this.bCryptPasswordEncoder = new BCryptPasswordEncoder();
     }
 
@@ -48,16 +49,11 @@ public class UserRequestServiceImpl extends CrudRequestServiceImpl<User, Long> i
         });
         return super.save(iterable);
     }
-
-    @Override
-    public User getAuthenticatedUser() {
-        String name = SecurityContextHolder.getContext().getAuthentication().getName();
-        return userRepository.findUsuarioByUsername(name);
-    }
+    
 
     @Override
     public User updateUser(Long aLong, UserRequestDTO entity, ModelMapper modelMapper) {
-        User authenticatedUser = getAuthenticatedUser();
+        User authenticatedUser = authService.getAuthenticatedUser();
 
         User existingUser = userRepository.findById(aLong)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
@@ -74,7 +70,7 @@ public class UserRequestServiceImpl extends CrudRequestServiceImpl<User, Long> i
 
     @Override
     public void deleteUser(Long aLong) {
-        User authenticatedUser = getAuthenticatedUser();
+        User authenticatedUser = authService.getAuthenticatedUser();
 
         User existingUser = userRepository.findById(aLong)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
