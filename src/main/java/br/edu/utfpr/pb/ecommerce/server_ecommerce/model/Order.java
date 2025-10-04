@@ -31,9 +31,9 @@ public class Order {
 
     @NotNull
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderItems> orderItems = new ArrayList<>();
+    private List<OrderItem> orderItems = new ArrayList<>();
 
-    public void addItem(OrderItems item){
+    public void addItem(OrderItem item){
         item.setOrder(this);
         this.orderItems.add(item);
     }

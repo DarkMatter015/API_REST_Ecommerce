@@ -25,7 +25,6 @@ public class UserResponseServiceImpl extends CrudResponseServiceImpl<User, Long>
 
     @Override
     public UserResponseDTO convertToDTO(User user, ModelMapper modelMapper) {
-        UserResponseDTO responseDTO = modelMapper.map(user, UserResponseDTO.class);
-        return responseDTO;
+        return modelMapper.map(user, UserResponseDTO.class);
     }
 }

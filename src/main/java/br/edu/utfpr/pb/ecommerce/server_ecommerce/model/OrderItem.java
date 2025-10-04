@@ -7,13 +7,13 @@ import lombok.*;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "tb_orderItem")
+@Table(name = "tb_order_item")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class OrderItems {
+public class OrderItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

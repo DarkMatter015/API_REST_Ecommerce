@@ -9,6 +9,7 @@ import br.edu.utfpr.pb.ecommerce.server_ecommerce.repository.OrderRepository;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.AuthService;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.IOrder.IOrderResponseService;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.impl.CRUD.CrudResponseServiceImpl;
+import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -36,7 +37,6 @@ public class OrderResponseServiceImpl extends CrudResponseServiceImpl<Order, Lon
 
     @Override
     public OrderResponseDTO convertToDTO(Order orderSalvo, ModelMapper modelMapper) {
-            // Converte para DTO de response
             OrderResponseDTO responseDTO = new OrderResponseDTO();
             responseDTO.setId(orderSalvo.getId());
             responseDTO.setUserId(orderSalvo.getUser().getId());
@@ -78,7 +78,7 @@ public class OrderResponseServiceImpl extends CrudResponseServiceImpl<Order, Lon
     public Order findById(Long id) {
         User user = authService.getAuthenticatedUser();
         return orderRepository.findByIdAndUser(id, user)
-                .orElseThrow(() -> new RuntimeException("Endereço não encontrado para este usuário"));
+                .orElseThrow(() -> new EntityNotFoundException("Order not found."));
     }
 
     @Override

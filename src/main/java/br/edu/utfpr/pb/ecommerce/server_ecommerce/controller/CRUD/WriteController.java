@@ -26,36 +26,30 @@ public abstract class WriteController<T, D, RD, ID extends Serializable> {
         this.typeDtoResponseClass = typeDtoResponseClass;
     }
 
-    private D convertToDto(T entity) {
-        return getModelMapper().map(entity, this.typeDtoClass);
-    }
-
-    private T convertToEntity(D entityDto) {
-        return getModelMapper().map(entityDto, this.typeClass);
-    }
-
-    private RD convertToDtoResponse(T entity) {
-        return getModelMapper().map(entity, this.typeDtoResponseClass);
-    }
-
-    private T convertResponseToEntity(RD entityDtoResponse) {
-        return getModelMapper().map(entityDtoResponse, this.typeClass);
+//    Generaliza o mapeamento de Entidades
+    private <S, T> T map(S source, Class<T> destinationType) {
+        return getModelMapper().map(source, destinationType);
     }
 
     @PostMapping
-    public ResponseEntity<RD> create(@RequestBody @Valid D entity) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(convertToDtoResponse(getService().save(convertToEntity(entity))));
+    public ResponseEntity<RD> create(@RequestBody @Valid D entityDto) {
+        T entity = map(entityDto, this.typeClass);
+        T savedEntity = getService().save(entity);
+        return ResponseEntity.status(HttpStatus.CREATED).body(map(savedEntity, this.typeDtoResponseClass));
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<RD> update(@PathVariable ID id, @RequestBody @Valid D entity) {
+    public ResponseEntity<RD> update(@PathVariable ID id, @RequestBody @Valid D entityDto) {
 
-        T object = getResponseService().findById(id);
-        if (object == null) {
-            return ResponseEntity.noContent().build();
-        }
+        T existingEntity = getResponseService().findById(id);
 
-        return ResponseEntity.status(HttpStatus.OK).body(convertToDtoResponse(getService().save(convertToEntity(entity))));
+        // Mapeia os dados do DTO para a entidade existente.
+        map(entityDto, existingEntity.getClass());
+
+        // Salva a entidade atualizada.
+        T updatedEntity = getService().save(existingEntity);
+
+        return ResponseEntity.status(HttpStatus.OK).body(map(updatedEntity, this.typeDtoResponseClass));
     }
 
     @DeleteMapping("{id}")

@@ -7,5 +7,5 @@ import org.modelmapper.ModelMapper;
 
 public interface IOrderResponseService extends ICrudResponseService<Order, Long> {
 
-    OrderResponseDTO convertToDTO(Order orderSalvo, ModelMapper modelMapper);
+    OrderResponseDTO convertToDTO(Order order, ModelMapper modelMapper);
 }

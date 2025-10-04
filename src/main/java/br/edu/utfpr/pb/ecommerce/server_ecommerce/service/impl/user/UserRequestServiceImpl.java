@@ -6,8 +6,10 @@ import br.edu.utfpr.pb.ecommerce.server_ecommerce.repository.UserRepository;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.AuthService;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.IUser.IUserRequestService;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.impl.CRUD.CrudRequestServiceImpl;
+import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,22 @@ public class UserRequestServiceImpl extends CrudRequestServiceImpl<User, Long> i
         this.bCryptPasswordEncoder = new BCryptPasswordEncoder();
     }
 
+    private void encodePassword(User user) {
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+    }
+
+    private User findAndValidateUser(Long id) {
+        User authenticatedUser = authService.getAuthenticatedUser();
+
+        User existingUser = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found."));
+
+        if (!existingUser.getId().equals(authenticatedUser.getId())) {
+            throw new AccessDeniedException("You don't have permission to modify this user.");
+        }
+        return existingUser;
+    }
+
     @Override
     protected JpaRepository<User, Long> getRepository() {
         return userRepository;
@@ -32,53 +50,37 @@ public class UserRequestServiceImpl extends CrudRequestServiceImpl<User, Long> i
 
     @Override
     public User save(User entity) {
-        entity.setPassword(bCryptPasswordEncoder.encode(entity.getPassword()));
+        encodePassword(entity);
         return super.save(entity);
     }
 
     @Override
     public User saveAndFlush(User entity) {
-        entity.setPassword(bCryptPasswordEncoder.encode(entity.getPassword()));
+        encodePassword(entity);
         return super.saveAndFlush(entity);
     }
 
     @Override
     public Iterable<User> save(Iterable<User> iterable) {
-        iterable.forEach(entity -> {
-            entity.setPassword(bCryptPasswordEncoder.encode(entity.getPassword()));
-        });
+        iterable.forEach(this::encodePassword);
         return super.save(iterable);
     }
-    
 
     @Override
-    public User updateUser(Long aLong, UserRequestDTO entity, ModelMapper modelMapper) {
-        User authenticatedUser = authService.getAuthenticatedUser();
+    public User updateUser(Long id, UserRequestDTO dto, ModelMapper modelMapper) {
+        User existingUser = findAndValidateUser(id);
 
-        User existingUser = userRepository.findById(aLong)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
+        modelMapper.map(dto, existingUser);
 
-        if (!existingUser.getId().equals(authenticatedUser.getId())) {
-            throw new RuntimeException("Usuário não autorizado.");
+        if (dto.getPassword() != null && !dto.getPassword().isEmpty()) {
+            encodePassword(existingUser);
         }
-
-        // Atualiza apenas os campos do DTO
-        modelMapper.map(entity, existingUser);
-        existingUser.setPassword(bCryptPasswordEncoder.encode(entity.getPassword()));
         return userRepository.save(existingUser);
     }
 
     @Override
-    public void deleteUser(Long aLong) {
-        User authenticatedUser = authService.getAuthenticatedUser();
-
-        User existingUser = userRepository.findById(aLong)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
-
-        if (!existingUser.getId().equals(authenticatedUser.getId())) {
-            throw new RuntimeException("Usuário não autorizado.");
-        }
-
+    public void deleteUser(Long id) {
+        User existingUser = findAndValidateUser(id);
         userRepository.delete(existingUser);
     }
 }

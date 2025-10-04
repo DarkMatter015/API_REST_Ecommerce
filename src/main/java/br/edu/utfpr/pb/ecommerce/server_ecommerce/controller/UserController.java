@@ -49,7 +49,7 @@ public class UserController extends WriteController<User, UserRequestDTO, UserRe
         User user = userRequestService.updateUser(id, entity, modelMapper);
 
         UserResponseDTO responseDTO = userResponseService.convertToDTO(user, modelMapper);
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
     }
 
     @Override
