@@ -7,6 +7,7 @@ import br.edu.utfpr.pb.ecommerce.server_ecommerce.repository.AddressRepository;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.AuthService;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.IAddress.IAddressResponseService;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.impl.CRUD.CrudResponseServiceImpl;
+import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,10 +36,8 @@ public class AddressResponseServiceImpl extends CrudResponseServiceImpl<Address,
 
     @Override
     public AddressResponseDTO convertToDTO(Address addressSalvo, ModelMapper modelMapper) {
-        AddressResponseDTO responseDTO = modelMapper.map(addressSalvo, AddressResponseDTO.class);
-        return responseDTO;
+        return modelMapper.map(addressSalvo, AddressResponseDTO.class);
     }
-
 
     @Override
     public List<Address> findAll() {
@@ -62,7 +61,7 @@ public class AddressResponseServiceImpl extends CrudResponseServiceImpl<Address,
     public Address findById(Long id) {
         User user = authService.getAuthenticatedUser();
         return addressRepository.findByIdAndUser(id, user)
-                .orElseThrow(() -> new RuntimeException("Endereço não encontrado para este usuário"));
+                .orElseThrow(() -> new EntityNotFoundException("Address not found."));
     }
 
     @Override

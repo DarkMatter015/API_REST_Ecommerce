@@ -1,11 +1,12 @@
-package br.edu.utfpr.pb.ecommerce.server_ecommerce.service.impl.orderItems;
+package br.edu.utfpr.pb.ecommerce.server_ecommerce.service.impl.orderItem;
 
-import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.OrderItems;
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.OrderItem;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.User;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.repository.OrderItemsRepository;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.AuthService;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.IOrderItems.IOrderItemsResponseService;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.impl.CRUD.CrudResponseServiceImpl;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class OrderItemsResponseServiceImpl extends CrudResponseServiceImpl<OrderItems, Long> implements IOrderItemsResponseService {
+public class OrderItemsResponseServiceImpl extends CrudResponseServiceImpl<OrderItem, Long> implements IOrderItemsResponseService {
 
     private final OrderItemsRepository orderItemsRepository;
     private final AuthService authService;
@@ -26,33 +27,33 @@ public class OrderItemsResponseServiceImpl extends CrudResponseServiceImpl<Order
     }
 
     @Override
-    protected JpaRepository<OrderItems, Long> getRepository() {
+    protected JpaRepository<OrderItem, Long> getRepository() {
         return orderItemsRepository;
     }
 
     @Override
-    public List<OrderItems> findAll() {
+    public List<OrderItem> findAll() {
         User user = authService.getAuthenticatedUser();
         return orderItemsRepository.findAllByOrder_User_Id(user.getId());
     }
 
     @Override
-    public List<OrderItems> findAll(Sort sort) {
+    public List<OrderItem> findAll(Sort sort) {
         User user = authService.getAuthenticatedUser();
         return orderItemsRepository.findAllByOrder_User_Id(user.getId(), sort);
     }
 
     @Override
-    public Page<OrderItems> findAll(Pageable pageable) {
+    public Page<OrderItem> findAll(Pageable pageable) {
         User user = authService.getAuthenticatedUser();
         return orderItemsRepository.findAllByOrder_User_Id(user.getId(), pageable);
     }
 
     @Override
-    public OrderItems findById(Long id) {
+    public OrderItem findById(Long id) {
         User user = authService.getAuthenticatedUser();
         return orderItemsRepository.findByIdAndOrder_User_Id(id, user.getId())
-                .orElseThrow(() -> new RuntimeException("Endereço não encontrado para este usuário"));
+                .orElseThrow(() -> new EntityNotFoundException("Order Item not found."));
     }
 
     @Override

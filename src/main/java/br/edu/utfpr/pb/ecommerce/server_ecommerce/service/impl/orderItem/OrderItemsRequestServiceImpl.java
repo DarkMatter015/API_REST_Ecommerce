@@ -1,8 +1,8 @@
-package br.edu.utfpr.pb.ecommerce.server_ecommerce.service.impl.orderItems;
+package br.edu.utfpr.pb.ecommerce.server_ecommerce.service.impl.orderItem;
 
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.orderItems.OrderItemsRequestDTO;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.orderItems.OrderItemsUpdateDTO;
-import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.OrderItems;
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.OrderItem;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.Order;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.Product;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.User;
@@ -12,11 +12,12 @@ import br.edu.utfpr.pb.ecommerce.server_ecommerce.repository.ProductRepository;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.AuthService;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.IOrderItems.IOrderItemsRequestService;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.impl.CRUD.CrudRequestServiceImpl;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class OrderItemsRequestServiceImpl extends CrudRequestServiceImpl<OrderItems, Long> implements IOrderItemsRequestService {
+public class OrderItemsRequestServiceImpl extends CrudRequestServiceImpl<OrderItem, Long> implements IOrderItemsRequestService {
 
     private final OrderItemsRepository orderItemsRepository;
     private final ProductRepository productRepository;
@@ -30,47 +31,50 @@ public class OrderItemsRequestServiceImpl extends CrudRequestServiceImpl<OrderIt
         this.authService = authService;
     }
 
+    private OrderItem findAndValidateOrderItem(Long orderItemId) {
+        User user = authService.getAuthenticatedUser();
+        return orderItemsRepository.findByIdAndOrder_User_Id(orderItemId, user.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Order item not found or you don't have permission to access it."));
+    }
+
     @Override
     protected JpaRepository getRepository() {
         return orderItemsRepository;
     }
 
-    public OrderItems adicionarItem(OrderItemsRequestDTO dto) {
+    @Override
+    public OrderItem createOrderItem(OrderItemsRequestDTO dto) {
         User user = authService.getAuthenticatedUser();
         Order order = orderRepository.findByIdAndUser(dto.getOrderId(), user)
-                .orElseThrow(() -> new IllegalArgumentException("Order não encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException("Order not found."));
 
         Product product = productRepository.findById(dto.getProductId())
-                .orElseThrow(() -> new IllegalArgumentException("Product não encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException("Product not found."));
 
-        OrderItems item = new OrderItems();
+        OrderItem item = new OrderItem();
         item.setOrder(order);
         item.setProduct(product);
         item.setQuantity(dto.getQuantity());
-        item.calculateTotalPrice();
 
         order.addItem(item);
 
         return orderItemsRepository.save(item);
     }
 
-    public OrderItems atualizarItem(OrderItemsUpdateDTO dto) {
-        User user = authService.getAuthenticatedUser();
-        OrderItems item = orderItemsRepository.findByIdAndOrder_User_Id(dto.getId(), user.getId())
-                .orElseThrow(() -> new IllegalArgumentException("Item não encontrado"));
+    @Override
+    public OrderItem updateOrderItem(OrderItemsUpdateDTO dto) {
+        OrderItem item = findAndValidateOrderItem(dto.getId());
 
         if (dto.getQuantity() != null) {
             item.setQuantity(dto.getQuantity());
         }
 
-        item.calculateTotalPrice();
         return orderItemsRepository.save(item);
     }
 
-    public void deletarItem(Long id) {
-        User user = authService.getAuthenticatedUser();
-        OrderItems item = orderItemsRepository.findByIdAndOrder_User_Id(id, user.getId())
-                .orElseThrow(() -> new IllegalArgumentException("Item não encontrado"));
+    @Override
+    public void deleteOrderItem(Long id) {
+        OrderItem item = findAndValidateOrderItem(id);
 
         Order order = item.getOrder();
         order.getOrderItems().remove(item);

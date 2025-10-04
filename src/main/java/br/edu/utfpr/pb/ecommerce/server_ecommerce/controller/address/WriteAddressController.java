@@ -48,7 +48,7 @@ public class WriteAddressController extends WriteController<Address, AddressRequ
     @Override
     public ResponseEntity<AddressResponseDTO> create(@RequestBody @Valid AddressRequestDTO address) {
 
-        Address addressSalvo = addressRequestService.createAddres(address);
+        Address addressSalvo = addressRequestService.createAddress(address);
         AddressResponseDTO responseDTO = addressResponseService.convertToDTO(addressSalvo, modelMapper);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);

@@ -36,11 +36,11 @@ public class OrderRequestServiceImpl extends CrudRequestServiceImpl<Order, Long>
         User user = authService.getAuthenticatedUser();
         order.setUser(user);
 
-        List<OrderItems> itens = dto.getOrderItems().stream().map(itemDTO -> {
+        List<OrderItem> itens = dto.getOrderItems().stream().map(itemDTO -> {
             Product product = productRepository.findById(itemDTO.getProductId())
                     .orElseThrow(() -> new IllegalArgumentException("Product não encontrado"));
 
-            OrderItems item = new OrderItems();
+            OrderItem item = new OrderItem();
             item.setProduct(product);
             item.setQuantity(itemDTO.getQuantity());
             item.setOrder(order);

@@ -13,5 +13,6 @@ public class OrderItemsUpdateDTO {
     @NotNull
     private Long id;
 
+    @NotNull
     private Integer quantity;
 }

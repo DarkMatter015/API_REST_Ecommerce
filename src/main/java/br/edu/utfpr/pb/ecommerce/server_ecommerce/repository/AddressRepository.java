@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,5 +21,6 @@ public interface AddressRepository extends JpaRepository<Address,Long> {
 
     void deleteAllByUser(User user);
     void deleteByIdAndUser(Long id, User user);
-    void deleteAllByUserAndIdIn(User user, Iterable<? extends Address> ids);
+
+    void deleteAllByIdInAndUser(Collection<Long> ids, User user);
 }
