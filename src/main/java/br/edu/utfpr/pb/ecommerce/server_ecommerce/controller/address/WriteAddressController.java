@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static br.edu.utfpr.pb.ecommerce.server_ecommerce.util.ValidationUtils.convertToDTOGeneric;
+
 @RestController
 @RequestMapping("address")
 public class WriteAddressController extends WriteController<Address, AddressRequestDTO, AddressResponseDTO, Long> {
@@ -49,7 +51,7 @@ public class WriteAddressController extends WriteController<Address, AddressRequ
     public ResponseEntity<AddressResponseDTO> create(@RequestBody @Valid AddressRequestDTO address) {
 
         Address addressSalvo = addressRequestService.createAddress(address);
-        AddressResponseDTO responseDTO = addressResponseService.convertToDTO(addressSalvo, modelMapper);
+        AddressResponseDTO responseDTO = convertToDTOGeneric(addressSalvo, AddressResponseDTO.class, modelMapper);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }

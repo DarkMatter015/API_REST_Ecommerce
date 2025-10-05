@@ -1,6 +1,7 @@
 package br.edu.utfpr.pb.ecommerce.server_ecommerce.service.impl.order;
 
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.order.OrderRequestDTO;
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.exception.ProductNotFoundException;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.*;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.repository.OrderRepository;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.repository.ProductRepository;
@@ -11,6 +12,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static br.edu.utfpr.pb.ecommerce.server_ecommerce.util.ValidationUtils.validateQuantity;
 
 @Service
 public class OrderRequestServiceImpl extends CrudRequestServiceImpl<Order, Long> implements IOrderRequestService {
@@ -36,17 +39,19 @@ public class OrderRequestServiceImpl extends CrudRequestServiceImpl<Order, Long>
         User user = authService.getAuthenticatedUser();
         order.setUser(user);
 
-        List<OrderItem> itens = dto.getOrderItems().stream().map(itemDTO -> {
-            Product product = productRepository.findById(itemDTO.getProductId())
-                    .orElseThrow(() -> new IllegalArgumentException("Product não encontrado"));
+        List<OrderItem> itens = dto.getOrderItems().stream()
+            .map(itemDTO -> {
+                Product product = productRepository.findById(itemDTO.getProductId())
+                    .orElseThrow(() -> new ProductNotFoundException("Product not found."));
 
-            OrderItem item = new OrderItem();
-            item.setProduct(product);
-            item.setQuantity(itemDTO.getQuantity());
-            item.setOrder(order);
+                OrderItem item = new OrderItem();
+                item.setProduct(product);
+                validateQuantity(itemDTO.getQuantity());
+                item.setQuantity(itemDTO.getQuantity());
+                item.setOrder(order);
 
-            return item;
-        }).toList();
+                return item;
+            }).toList();
 
         order.setOrderItems(itens);
 

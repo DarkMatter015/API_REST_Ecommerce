@@ -6,6 +6,5 @@ import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.ICRUD.ICrudResponseSer
 import org.modelmapper.ModelMapper;
 
 public interface IOrderResponseService extends ICrudResponseService<Order, Long> {
-
     OrderResponseDTO convertToDTO(Order order, ModelMapper modelMapper);
 }

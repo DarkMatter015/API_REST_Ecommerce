@@ -1,5 +1,6 @@
 package br.edu.utfpr.pb.ecommerce.server_ecommerce.service;
 
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.exception.AuthenticatedUserNotFoundException;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.User;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.repository.UserRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,6 +29,10 @@ public class AuthService implements UserDetailsService {
 
     public User getAuthenticatedUser() {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
-        return userRepository.findUsuarioByUsername(name);
+        User user = userRepository.findUsuarioByUsername(name);
+        if (user == null) {
+            throw new AuthenticatedUserNotFoundException("Usuário autenticado não encontrado!");
+        }
+        return user;
     }
 }

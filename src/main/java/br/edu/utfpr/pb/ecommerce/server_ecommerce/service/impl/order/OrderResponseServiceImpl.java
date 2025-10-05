@@ -1,15 +1,15 @@
 package br.edu.utfpr.pb.ecommerce.server_ecommerce.service.impl.order;
 
-import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.orderItems.OrderItemsResponseDTO;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.order.OrderResponseDTO;
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.orderItem.OrderItemResponseDTO;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.product.ProductDTO;
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.exception.OrderNotFoundException;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.Order;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.User;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.repository.OrderRepository;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.AuthService;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.IOrder.IOrderResponseService;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.impl.CRUD.CrudResponseServiceImpl;
-import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +18,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static br.edu.utfpr.pb.ecommerce.server_ecommerce.util.ValidationUtils.convertToDTOGeneric;
 
 @Service
 public class OrderResponseServiceImpl extends CrudResponseServiceImpl<Order, Long> implements IOrderResponseService {
@@ -41,15 +43,16 @@ public class OrderResponseServiceImpl extends CrudResponseServiceImpl<Order, Lon
             responseDTO.setId(orderSalvo.getId());
             responseDTO.setUserId(orderSalvo.getUser().getId());
 
-            List<OrderItemsResponseDTO> itensResponse = orderSalvo.getOrderItems().stream().map(item -> {
-                OrderItemsResponseDTO dto = new OrderItemsResponseDTO();
-                dto.setId(item.getId());
-                ProductDTO productDTO = modelMapper.map(item.getProduct(), ProductDTO.class);
-                dto.setProduct(productDTO);
-                dto.setQuantity(item.getQuantity());
-                dto.setTotalPrice(item.getTotalPrice());
-                return dto;
-            }).toList();
+            List<OrderItemResponseDTO> itensResponse = orderSalvo.getOrderItems().stream()
+                    .map(item -> {
+                        OrderItemResponseDTO dto = new OrderItemResponseDTO();
+                        dto.setId(item.getId());
+                        ProductDTO productDTO = convertToDTOGeneric(item.getProduct(), ProductDTO.class, modelMapper);
+                        dto.setProduct(productDTO);
+                        dto.setQuantity(item.getQuantity());
+                        dto.setTotalPrice(item.getTotalPrice());
+                        return dto;
+                    }).toList();
 
             responseDTO.setOrderItems(itensResponse);
 
@@ -78,7 +81,7 @@ public class OrderResponseServiceImpl extends CrudResponseServiceImpl<Order, Lon
     public Order findById(Long id) {
         User user = authService.getAuthenticatedUser();
         return orderRepository.findByIdAndUser(id, user)
-                .orElseThrow(() -> new EntityNotFoundException("Order not found."));
+                .orElseThrow(() -> new OrderNotFoundException("Order not found."));
     }
 
     @Override

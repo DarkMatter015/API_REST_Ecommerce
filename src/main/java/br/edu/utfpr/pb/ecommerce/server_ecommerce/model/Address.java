@@ -35,9 +35,11 @@ public class Address {
     private String neighborhood;
 
     @NotNull
+    @Size(min = 3, max = 255)
     private String city;
 
     @NotNull
+    @Size(min = 3, max = 255)
     private String state;
 
     private String cep;
