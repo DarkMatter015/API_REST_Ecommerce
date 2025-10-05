@@ -1,12 +1,12 @@
 package br.edu.utfpr.pb.ecommerce.server_ecommerce.service.impl.orderItem;
 
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.exception.OrderItemNotFoundException;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.OrderItem;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.User;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.repository.OrderItemsRepository;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.AuthService;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.IOrderItems.IOrderItemsResponseService;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.impl.CRUD.CrudResponseServiceImpl;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -53,7 +53,7 @@ public class OrderItemsResponseServiceImpl extends CrudResponseServiceImpl<Order
     public OrderItem findById(Long id) {
         User user = authService.getAuthenticatedUser();
         return orderItemsRepository.findByIdAndOrder_User_Id(id, user.getId())
-                .orElseThrow(() -> new EntityNotFoundException("Order Item not found."));
+                .orElseThrow(() -> new OrderItemNotFoundException("Order Item not found."));
     }
 
     @Override

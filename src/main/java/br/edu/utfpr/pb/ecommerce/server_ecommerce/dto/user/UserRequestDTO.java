@@ -21,12 +21,12 @@ public class UserRequestDTO {
     private String email;
 
     @NotNull
-    @Size(min = 3, max = 255)
+    @Size(min = 3, max = 255, message = "Username must have between 3 and 255 characters.")
     private String username;
 
     @NotNull
-    @Size(min = 6)
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).*$")
+    @Size(min = 6, message = "Password must have at least 6 characters.")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).*$", message = "Password must contain at least one lowercase letter, one uppercase letter, and one number.")
     private String password;
 
 }

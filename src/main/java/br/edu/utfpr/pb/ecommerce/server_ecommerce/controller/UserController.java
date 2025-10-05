@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static br.edu.utfpr.pb.ecommerce.server_ecommerce.util.ValidationUtils.convertToDTOGeneric;
+
 @RestController
 @RequestMapping("users")
 public class UserController extends WriteController<User, UserRequestDTO, UserResponseDTO, Long> {
@@ -48,7 +50,7 @@ public class UserController extends WriteController<User, UserRequestDTO, UserRe
     public ResponseEntity<UserResponseDTO> update(@PathVariable Long id, @RequestBody  @Valid UserRequestDTO entity) {
         User user = userRequestService.updateUser(id, entity, modelMapper);
 
-        UserResponseDTO responseDTO = userResponseService.convertToDTO(user, modelMapper);
+        UserResponseDTO responseDTO = convertToDTOGeneric(user, UserResponseDTO.class, modelMapper);
         return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
     }
 

@@ -1,12 +1,12 @@
 package br.edu.utfpr.pb.ecommerce.server_ecommerce.service.impl.user;
 
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.user.UserRequestDTO;
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.exception.UserNotFoundException;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.User;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.repository.UserRepository;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.AuthService;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.IUser.IUserRequestService;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.impl.CRUD.CrudRequestServiceImpl;
-import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.access.AccessDeniedException;
@@ -35,7 +35,7 @@ public class UserRequestServiceImpl extends CrudRequestServiceImpl<User, Long> i
         User authenticatedUser = authService.getAuthenticatedUser();
 
         User existingUser = userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("User not found."));
+                .orElseThrow(() -> new UserNotFoundException("User not found."));
 
         if (!existingUser.getId().equals(authenticatedUser.getId())) {
             throw new AccessDeniedException("You don't have permission to modify this user.");

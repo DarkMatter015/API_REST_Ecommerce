@@ -1,6 +1,6 @@
 package br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.order;
 
-import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.orderItems.OrderItemsRequestDTO;
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.orderItem.OrderItemRequestDTO;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,5 +14,5 @@ import java.util.List;
 public class OrderRequestDTO {
 
     @NotNull
-    private List<OrderItemsRequestDTO> orderItems;
+    private List<OrderItemRequestDTO> orderItems;
 }

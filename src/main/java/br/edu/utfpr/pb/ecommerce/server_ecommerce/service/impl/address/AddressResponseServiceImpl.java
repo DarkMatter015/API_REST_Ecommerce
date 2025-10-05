@@ -1,14 +1,12 @@
 package br.edu.utfpr.pb.ecommerce.server_ecommerce.service.impl.address;
 
-import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.address.AddressResponseDTO;
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.exception.AddressNotFoundException;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.Address;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.User;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.repository.AddressRepository;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.AuthService;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.IAddress.IAddressResponseService;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.impl.CRUD.CrudResponseServiceImpl;
-import jakarta.persistence.EntityNotFoundException;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -33,12 +31,6 @@ public class AddressResponseServiceImpl extends CrudResponseServiceImpl<Address,
         return addressRepository;
     }
 
-
-    @Override
-    public AddressResponseDTO convertToDTO(Address addressSalvo, ModelMapper modelMapper) {
-        return modelMapper.map(addressSalvo, AddressResponseDTO.class);
-    }
-
     @Override
     public List<Address> findAll() {
         User user = authService.getAuthenticatedUser();
@@ -61,7 +53,7 @@ public class AddressResponseServiceImpl extends CrudResponseServiceImpl<Address,
     public Address findById(Long id) {
         User user = authService.getAuthenticatedUser();
         return addressRepository.findByIdAndUser(id, user)
-                .orElseThrow(() -> new EntityNotFoundException("Address not found."));
+                .orElseThrow(() -> new AddressNotFoundException("Address not found."));
     }
 
     @Override
