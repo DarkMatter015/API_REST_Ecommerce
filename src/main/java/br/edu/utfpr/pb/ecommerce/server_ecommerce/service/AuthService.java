@@ -20,18 +20,18 @@ public class AuthService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findUsuarioByUsername(username);
+        User user = userRepository.findByUsername(username);
         if (user == null) {
-            throw new UsernameNotFoundException("Usuário não encontrado!");
+            throw new UsernameNotFoundException("User not found with username: " + username + "!");
         }
         return user;
     }
 
     public User getAuthenticatedUser() {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userRepository.findUsuarioByUsername(name);
+        User user = userRepository.findByUsername(name);
         if (user == null) {
-            throw new AuthenticatedUserNotFoundException("Usuário autenticado não encontrado!");
+            throw new AuthenticatedUserNotFoundException("Authenticated user not found in the database!");
         }
         return user;
     }
