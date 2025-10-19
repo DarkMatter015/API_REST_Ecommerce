@@ -1,9 +1,16 @@
-package br.edu.utfpr.pb.ecommerce.server_ecommerce.security;
+package br.edu.utfpr.pb.ecommerce.server_ecommerce.security.config;
 
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.security.handler.CustomAuthenticationFailureHandler;
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.security.filter.JWTAuthenticationFilter;
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.security.filter.JWTAuthorizationFilter;
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.security.JwtProperties;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.AuthService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -20,6 +27,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
 import java.util.List;
 
 @EnableWebSecurity
@@ -29,10 +37,19 @@ public class WebSecurity {
     private final AuthService authService;
     // Objeto responsável por realizar o tratamento de exceção quando o usuário informar credenciais incorretas ao autenticar-se.
     private final AuthenticationEntryPoint authenticationEntryPoint;
+    private final CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
+    private final ObjectMapper objectMapper;
+    private final JwtProperties jwtProperties;
 
-    public WebSecurity(AuthService authService, AuthenticationEntryPoint authenticationEntryPoint) {
+    @Autowired
+    private Environment env;
+
+    public WebSecurity(AuthService authService, AuthenticationEntryPoint authenticationEntryPoint, CustomAuthenticationFailureHandler customAuthenticationFailureHandler, ObjectMapper objectMapper, JwtProperties jwtProperties) {
         this.authService = authService;
         this.authenticationEntryPoint = authenticationEntryPoint;
+        this.customAuthenticationFailureHandler = customAuthenticationFailureHandler;
+        this.objectMapper = objectMapper;
+        this.jwtProperties = jwtProperties;
     }
 
     @Bean
@@ -45,38 +62,49 @@ public class WebSecurity {
 
         // authenticationManager -> responsável por gerenciar a autenticação dos usuários
         AuthenticationManager authenticationManager = authenticationManagerBuilder.build();
-        //Configuração para funcionar o console do H2.
-        http.headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
+
+        boolean isDev = Arrays.asList(env.getActiveProfiles()).contains("dev");
+
+        if (isDev) {
+            http.headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
+        }
+
         // desabilita o uso de csrf
         http.csrf(AbstractHttpConfigurer::disable);
 
         // Adiciona configuração de CORS
-        http.cors(cors -> corsConfigurationSource());
+        http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
 
         //define o objeto responsável pelo tratamento de exceção ao entrar com credenciais inválidas
         http.exceptionHandling(exceptionHandling ->
                 exceptionHandling.authenticationEntryPoint(authenticationEntryPoint));
 
         // configura a authorização das requisições
-        http.authorizeHttpRequests((authorize) -> authorize
-                //permite que a rota "/users" seja acessada, mesmo sem o usuário estar autenticado desde que o método HTTP da requisição seja POST
-                .requestMatchers(HttpMethod.POST, "/users/**").permitAll()
-                //permite que a rota "/error" seja acessada por qualquer requisição mesmo o usuário não estando autenticado
-                .requestMatchers("/error/**").permitAll()
-                //permite que a rota "/h2-console" seja acessada por qualquer requisição mesmo o usuário não estando autenticado
-                .requestMatchers("/h2-console/**").permitAll()
+        http.authorizeHttpRequests((authorize) -> {
+            authorize
+                    //permite que a rota "/users" seja acessada, mesmo sem o usuário estar autenticado desde que o método HTTP da requisição seja POST
+                    .requestMatchers(HttpMethod.POST, "/users/**").permitAll()
+                    //permite que a rota "/error" seja acessada por qualquer requisição mesmo o usuário não estando autenticado
+                    .requestMatchers("/error/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/categories/**").permitAll();
 
-                .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/categories/**").permitAll()
+            // Checa se o ambiente for DEV
+            if (isDev) {
+                authorize.requestMatchers("/h2-console/**").permitAll();
+            } else {
+                authorize.requestMatchers("/h2-console/**").denyAll();
+            }
 
-                //as demais rotas da aplicação só podem ser acessadas se o usuário estiver autenticado
-                .anyRequest().authenticated()
+            //as demais rotas da aplicação só podem ser acessadas se o usuário estiver autenticado
+            authorize.anyRequest().authenticated();
+            }
         );
         http.authenticationManager(authenticationManager)
                 //Filtro da Autenticação - sobrescreve o método padrão do Spring Security para Autenticação.
-                .addFilter(new JWTAuthenticationFilter(authenticationManager, authService))
+                .addFilter(new JWTAuthenticationFilter(authenticationManager, authService, objectMapper, jwtProperties, customAuthenticationFailureHandler))
                 //Filtro da Autorização - - sobrescreve o método padrão do Spring Security para Autorização.
-                .addFilter(new JWTAuthorizationFilter(authenticationManager, authService))
+                .addFilter(new JWTAuthorizationFilter(authenticationManager, jwtProperties))
                 //Como será criada uma API REST e todas as requisições que necessitam de autenticação/autorização serão realizadas com o envio do token JWT do usuário, não será necessário fazer controle de sessão no *back-end*.
                 .sessionManagement(
                         sessionManagement -> 
@@ -99,14 +127,15 @@ public class WebSecurity {
         // Lista das origens autorizadas, no nosso caso que iremos rodar a aplicação localmente o * poderia ser trocado
         // por: http://localhost:porta, em que :porta será a porta em que a aplicação cliente será executada
         configuration.setAllowedOrigins(List.of("*"));
+
         // Lista dos métodos HTTP autorizados
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "TRACE", "CONNECT"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+
         // Lista dos Headers autorizados, o Authorization será o header que iremos utilizar para transferir o Token
-        configuration.setAllowedHeaders(List.of("Authorization","x-xsrf-token",
-                "Access-Control-Allow-Headers", "Origin",
-                "Accept", "X-Requested-With", "Content-Type",
-                "Access-Control-Request-Method",
-                "Access-Control-Request-Headers", "Auth-Id-Token"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept", "Origin"));
+
+        configuration.setAllowCredentials(false);
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
