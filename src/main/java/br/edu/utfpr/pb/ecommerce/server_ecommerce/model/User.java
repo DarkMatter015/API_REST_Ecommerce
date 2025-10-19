@@ -24,11 +24,9 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     @NotBlank
     @Size(min = 3, max = 255)
-    @Column(unique = true)
-    private String username;
+    private String displayName;
 
     @NotBlank
     @Size(min = 4, max = 255)
@@ -45,10 +43,10 @@ public class User implements UserDetails {
         return AuthorityUtils.createAuthorityList("ROLE_USER");
     }
 
-//    @Override
-//    public String getUsername() {
-//        return this.email;
-//    }
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
 
     @Override
     public boolean isAccountNonExpired() {

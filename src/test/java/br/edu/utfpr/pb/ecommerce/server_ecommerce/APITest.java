@@ -85,7 +85,7 @@ public class APITest {
     @Test
     public void postUser_whenUserIsValid_receiveOK() {
         User user = new User();
-        user.setUsername("new-user");
+        user.setDisplayName("new-user");
         user.setEmail("new@teste.com");
         user.setPassword("P4ssword1A");
 

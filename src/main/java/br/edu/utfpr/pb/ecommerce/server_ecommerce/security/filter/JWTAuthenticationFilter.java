@@ -53,7 +53,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
             return super.getAuthenticationManager().authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            credentials.getUsername(),
+                            credentials.getEmail(),
                             credentials.getPassword(),
                             new ArrayList<>()
                     )
@@ -72,8 +72,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         User user = (User) authService.loadUserByUsername(authResult.getName());
         // o método create() da classe JWT é utilizado para criação de um novo token JWT
         String token = JWT.create()
-                // o objeto authResult possui os dados do usuário autenticado, nesse caso o método getName() retorna o username do usuário foi autenticado no método attemptAuthentication.
-                .withSubject(user.getUsername())
+                // o objeto authResult possui os dados do usuário autenticado, nesse caso o método getEmail() retorna o email do usuário foi autenticado no método attemptAuthentication.
+                .withSubject(user.getEmail())
                 //a data de validade do token é a data atual mais o valor armazenado na constante EXPIRATION_TIME, nesse caso 1 dia
                 .withExpiresAt(
                         new Date(System.currentTimeMillis()  + jwtProperties.getExpirationTime())

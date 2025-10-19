@@ -76,8 +76,8 @@ public class UserRequestServiceImpl extends CrudRequestServiceImpl<User, UserUpd
     public User update(Long id, UserUpdateDTO dto) {
         User existingUser = findAndValidateUser(id);
 
-        if (validateStringNullOrBlank(dto.getUsername())) {
-            existingUser.setUsername(dto.getUsername());
+        if (validateStringNullOrBlank(dto.getDisplayName())) {
+            existingUser.setDisplayName(dto.getDisplayName());
         }
 
         if (validateStringNullOrBlank(dto.getPassword())) {

@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class UserUpdateDTO {
 
     @Size(min = 3, max = 255, message = "Username must have between 3 and 255 characters.")
-    private String username;
+    private String displayName;
 
     @Size(min = 6, message = "Password must have at least 6 characters.")
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).*$", message = "Password must contain at least one lowercase letter, one uppercase letter, and one number.")

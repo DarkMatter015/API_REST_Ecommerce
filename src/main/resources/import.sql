@@ -18,8 +18,8 @@ insert into tb_product(name, description, price, url_image, category_id) values 
 
 
 -- User - password: 123
-INSERT INTO tb_user(username, email, password) VALUES ('Administrador', 'admin@teste.com','$2a$10$.PVIfB07x.SfMYTcToxL0.yxcLWU0GbS2NUO1W1QAvqMm/TsFhVem');
-INSERT INTO tb_user(username, email, password) VALUES ('Teste', 'test@teste.com','$2a$10$.PVIfB07x.SfMYTcToxL0.yxcLWU0GbS2NUO1W1QAvqMm/TsFhVem');
+INSERT INTO tb_user(display_name, email, password) VALUES ('Administrador', 'admin@teste.com','$2a$10$.PVIfB07x.SfMYTcToxL0.yxcLWU0GbS2NUO1W1QAvqMm/TsFhVem');
+INSERT INTO tb_user(display_name, email, password) VALUES ('Teste', 'test@teste.com','$2a$10$.PVIfB07x.SfMYTcToxL0.yxcLWU0GbS2NUO1W1QAvqMm/TsFhVem');
 
 
 -- Adrress
