@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -32,24 +33,28 @@ public class AddressResponseServiceImpl extends CrudResponseServiceImpl<Address,
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Address> findAll() {
         User user = authService.getAuthenticatedUser();
         return addressRepository.findAllByUser(user);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Address> findAll(Sort sort) {
         User user = authService.getAuthenticatedUser();
         return addressRepository.findAllByUser(user, sort);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<Address> findAll(Pageable pageable) {
         User user = authService.getAuthenticatedUser();
         return addressRepository.findAllByUser(user, pageable);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Address findById(Long id) {
         User user = authService.getAuthenticatedUser();
         return addressRepository.findByIdAndUser(id, user)
@@ -57,12 +62,14 @@ public class AddressResponseServiceImpl extends CrudResponseServiceImpl<Address,
     }
 
     @Override
+    @Transactional(readOnly = true)
     public boolean exists(Long id) {
         User user = authService.getAuthenticatedUser();
         return addressRepository.existsByUserAndId(user, id);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public long count() {
         User user = authService.getAuthenticatedUser();
         return addressRepository.countByUser(user);

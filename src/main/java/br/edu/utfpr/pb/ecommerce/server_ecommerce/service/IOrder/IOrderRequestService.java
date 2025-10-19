@@ -1,9 +1,10 @@
 package br.edu.utfpr.pb.ecommerce.server_ecommerce.service.IOrder;
 
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.order.OrderRequestDTO;
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.order.OrderUpdateDTO;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.Order;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.ICRUD.ICrudRequestService;
 
-public interface IOrderRequestService extends ICrudRequestService<Order, Long> {
+public interface IOrderRequestService extends ICrudRequestService<Order, OrderUpdateDTO, Long> {
     Order createOrder(OrderRequestDTO dto);
 }

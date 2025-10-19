@@ -12,29 +12,33 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
-// T = tipo da classe (User, Category...), D = tipo do DTO (Request, Response), ID = atributo da chave primária da classe
-public abstract class ReadController<T, D, ID extends Serializable> {
+// T = class type (User, Category...), RD = DTO type (Response), ID = primary key attribute of the class
+public abstract class ReadController<T, RD, ID extends Serializable> {
 
-    protected abstract ICrudResponseService<T, ID> getService();
-    protected abstract ModelMapper getModelMapper();
+    private final ICrudResponseService<T, ID> service;
+    protected final ModelMapper modelMapper; // 'protected' to be used by 'hooks'
+    private final Class<RD> typeDtoClass;
 
-    private final Class<D> typeDtoClass;
-
-    public ReadController(Class<D> typeDtoClass) {
+    public ReadController(Class<RD> typeDtoClass,
+                          ICrudResponseService<T, ID> service,
+                          ModelMapper modelMapper) {
         this.typeDtoClass = typeDtoClass;
+        this.service = service;
+        this.modelMapper = modelMapper;
     }
 
-    private D convertToDto(T entity) {
-        return getModelMapper().map(entity, this.typeDtoClass);
+    // protected to @Override method
+    protected RD convertToDto(T entity) {
+        return this.modelMapper.map(entity, this.typeDtoClass);
     }
 
     @GetMapping //http://ip-api:port/request-mapping
-    public ResponseEntity<List<D>> findAll() {
-        return ResponseEntity.ok(getService().findAll().stream().map(this::convertToDto).collect(Collectors.toList()));
+    public ResponseEntity<List<RD>> findAll() {
+        return ResponseEntity.ok(this.service.findAll().stream().map(this::convertToDto).collect(Collectors.toList()));
     }
 
     @GetMapping("page") //http://ip-api:port/request-mapping/page?page=1&size=5
-    public ResponseEntity<Page<D>> findAll(@RequestParam int page,
+    public ResponseEntity<Page<RD>> findAll(@RequestParam int page,
                                            @RequestParam int size,
                                            @RequestParam(required = false) String order,
                                            @RequestParam(required = false) Boolean asc) {
@@ -42,12 +46,12 @@ public abstract class ReadController<T, D, ID extends Serializable> {
         if (order != null && asc != null) {
             pageRequest = PageRequest.of(page, size, asc ? Sort.Direction.ASC : Sort.Direction.DESC, order);
         }
-        return ResponseEntity.ok(getService().findAll(pageRequest).map(this::convertToDto));
+        return ResponseEntity.ok(this.service.findAll(pageRequest).map(this::convertToDto));
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<D> findOne(@PathVariable ID id) {
-        T entity = getService().findById(id);
+    public ResponseEntity<RD> findOne(@PathVariable ID id) {
+        T entity = this.service.findById(id);
         if (entity != null) {
             return ResponseEntity.ok(convertToDto(entity));
         } else {
@@ -57,12 +61,12 @@ public abstract class ReadController<T, D, ID extends Serializable> {
 
     @GetMapping("exists/{id}")
     public ResponseEntity<Boolean> exists(@PathVariable ID id) {
-        return ResponseEntity.ok(getService().exists(id));
+        return ResponseEntity.ok(this.service.exists(id));
     }
 
     @GetMapping("count")
     public ResponseEntity<Long> count() {
-        return ResponseEntity.ok(getService().count());
+        return ResponseEntity.ok(this.service.count());
     }
 
 }

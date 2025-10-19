@@ -22,7 +22,7 @@ public class AuthService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
         if (user == null) {
-            throw new UsernameNotFoundException("User not found with username: " + username + "!");
+            throw new UsernameNotFoundException("User not found with username: " + username);
         }
         return user;
     }
@@ -31,7 +31,7 @@ public class AuthService implements UserDetailsService {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByUsername(name);
         if (user == null) {
-            throw new AuthenticatedUserNotFoundException("Authenticated user not found in the database!");
+            throw new AuthenticatedUserNotFoundException("Authenticated user not found!");
         }
         return user;
     }

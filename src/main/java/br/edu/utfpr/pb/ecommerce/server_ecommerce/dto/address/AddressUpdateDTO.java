@@ -1,6 +1,5 @@
 package br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.address;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -10,28 +9,23 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddressRequestDTO {
+public class AddressUpdateDTO {
 
-    @NotBlank
     @Size(min = 3, max = 255)
     private String street;
 
-    @NotBlank
     private String number;
 
     private String complement;
 
     private String neighborhood;
 
-    @NotBlank
     @Size(min = 3, max = 255)
     private String city;
 
-    @NotBlank
     @Size(min = 2, max = 255)
     private String state;
 
-    @NotBlank
     @Pattern(regexp = "\\d{8}", message = "The CEP must contain only 8 numbers.")
     private String cep;
 }
