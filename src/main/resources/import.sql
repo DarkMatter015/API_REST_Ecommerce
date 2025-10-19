@@ -5,6 +5,7 @@ insert into tb_category(name) values ('Cozinha');
 insert into tb_category(name) values ('Móveis');
 insert into tb_category(name) values ('Eletrônico');
 
+
 -- Product
 insert into tb_product(name, description, price, url_image, category_id) values ('Refrigerador 429L','Refrigerador 429L Branco, duplex....',1990.0, 'https://cdn.leroymerlin.com.br/products/geladeira_brastemp_frost_free_duplex_429_litros_branca_com_tw_1552511408_5919_600x600.jpg', 2);
 insert into tb_product(name, description, price, url_image, category_id) values ('Notebook Arus 15.6','Notebook Arus 15.6 Core I7, 16Gb Ram...',2449.0, 'https://m.media-amazon.com/images/I/61FDo2FhQDL._UF894,1000_QL80_.jpg',1);
@@ -15,28 +16,32 @@ insert into tb_product(name, description, price, url_image, category_id) values 
 insert into tb_product(name, description, price, url_image, category_id) values ('Fogão 6 Bocas','Fogão 6 Bocas em aço inox, ...', 799.99, 'https://consul.vtexassets.com/arquivos/ids/230022-800-800?v=637976381016900000&width=800&height=800&aspect=true', 3);
 insert into tb_product(name, description, price, url_image, category_id) values ('Roteador Wi-Fi 5.4GhZ','Roteador Wi-Fi 5.4GhZ, 6 antenas...',1299.0, 'https://img.kalunga.com.br/fotosdeproducts/610540z_1.jpg', 1);
 
+
 -- User - password: 123
 INSERT INTO tb_user(username, email, password) VALUES ('Administrador', 'admin@teste.com','$2a$10$.PVIfB07x.SfMYTcToxL0.yxcLWU0GbS2NUO1W1QAvqMm/TsFhVem');
 INSERT INTO tb_user(username, email, password) VALUES ('Teste', 'test@teste.com','$2a$10$.PVIfB07x.SfMYTcToxL0.yxcLWU0GbS2NUO1W1QAvqMm/TsFhVem');
 
+
 -- Adrress
-insert into tb_address(user_id, street, number, complement, neighborhood, city, state, cep) values (1, 'Rua das Palmeiras', '120', 'Apto 301', 'Centro', 'Pato Branco', 'PR', '85501-000');
-INSERT INTO tb_address (user_id, street, number, complement, neighborhood, city, state, cep) VALUES (1, 'Avenida Brasil', '950', NULL, 'Bela Vista', 'Curitiba', 'PR', '80010-020');
-INSERT INTO tb_address (user_id, street, number, complement, neighborhood, city, state, cep) VALUES (2, 'Rua XV de Novembro', '45', 'Casa 2', 'São Cristóvão', 'Londrina', 'PR', '86010-150');
-INSERT INTO tb_address (user_id, street, number, complement, neighborhood, city, state, cep) VALUES (2, 'Travessa das Acácias', '78', NULL, 'Jardim América', 'Maringá', 'PR', '87020-200');
+insert into tb_address(user_id, street, number, complement, neighborhood, city, state, cep) values (1, 'Rua das Palmeiras', '120', 'Apto 301', 'Centro', 'Pato Branco', 'PR', '85501000');
+INSERT INTO tb_address (user_id, street, number, complement, neighborhood, city, state, cep) VALUES (1, 'Avenida Brasil', '950', NULL, 'Bela Vista', 'Curitiba', 'PR', '80010020');
+INSERT INTO tb_address (user_id, street, number, complement, neighborhood, city, state, cep) VALUES (2, 'Rua XV de Novembro', '45', 'Casa 2', 'São Cristóvão', 'Londrina', 'PR', '86010150');
+INSERT INTO tb_address (user_id, street, number, complement, neighborhood, city, state, cep) VALUES (2, 'Travessa das Acácias', '78', NULL, 'Jardim América', 'Maringá', 'PR', '87020200');
+
 
 -- Order
--- Pedido 1 do usuário 1
-INSERT INTO tb_order (data, user_id) VALUES (NOW(), 1);
+-- Pedido 1 do usuário 1 (usando o endereço 'Rua das Palmeiras')
+INSERT INTO tb_order (data, user_id, address_street, address_number, address_complement, address_neighborhood, address_city, address_state, address_cep) VALUES (NOW(), 1, 'Rua das Palmeiras', '120', 'Apto 301', 'Centro', 'Pato Branco', 'PR', '85501000');
 
--- Pedido 2 do usuário 1
-INSERT INTO tb_order (data, user_id) VALUES (NOW(), 1);
+-- Pedido 2 do usuário 1 (usando o endereço 'Avenida Brasil')
+INSERT INTO tb_order (data, user_id, address_street, address_number, address_complement, address_neighborhood, address_city, address_state, address_cep) VALUES (NOW(), 1, 'Avenida Brasil', '950', NULL, 'Bela Vista', 'Curitiba', 'PR', '80010020');
 
--- Pedido 3 do usuário 2
-INSERT INTO tb_order (data, user_id) VALUES (NOW(), 2);
+-- Pedido 3 do usuário 2 (usando o endereço 'Rua XV de Novembro')
+INSERT INTO tb_order (data, user_id, address_street, address_number, address_complement, address_neighborhood, address_city, address_state, address_cep) VALUES (NOW(), 2, 'Rua XV de Novembro', '45', 'Casa 2', 'São Cristóvão', 'Londrina', 'PR', '86010150');
 
--- Pedido 4 do usuário 2
-INSERT INTO tb_order (data, user_id) VALUES (NOW(), 2);
+-- Pedido 4 do usuário 2 (usando o endereço 'Travessa das Acácias')
+INSERT INTO tb_order (data, user_id, address_street, address_number, address_complement, address_neighborhood, address_city, address_state, address_cep) VALUES (NOW(), 2, 'Travessa das Acácias', '78', NULL, 'Jardim América', 'Maringá', 'PR', '87020200');
+
 
 -- OrderItem
 -- Itens do Pedido 1

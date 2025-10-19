@@ -1,7 +1,9 @@
 package br.edu.utfpr.pb.ecommerce.server_ecommerce.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -23,24 +25,26 @@ public class Address {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @NotNull
+    @NotBlank
     @Size(min = 3, max = 255)
     private String street;
 
-    @NotNull
+    @NotBlank
     private String number;
 
     private String complement;
 
     private String neighborhood;
 
-    @NotNull
+    @NotBlank
     @Size(min = 3, max = 255)
     private String city;
 
-    @NotNull
-    @Size(min = 3, max = 255)
+    @NotBlank
+    @Size(min = 2, max = 255)
     private String state;
 
+    @NotBlank
+    @Pattern(regexp = "\\d{8}", message = "The CEP must contain only 8 numbers.")
     private String cep;
 }

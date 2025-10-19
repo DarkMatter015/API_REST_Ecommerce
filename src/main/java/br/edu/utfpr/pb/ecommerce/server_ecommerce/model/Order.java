@@ -33,6 +33,9 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
 
+    @Embedded
+    private EmbeddedAddress address;
+
     public void addItem(OrderItem item){
         item.setOrder(this);
         this.orderItems.add(item);

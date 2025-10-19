@@ -2,9 +2,9 @@ package br.edu.utfpr.pb.ecommerce.server_ecommerce.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
 
-@Component
+@Configuration
 public class WebConfig {
 
     @Bean

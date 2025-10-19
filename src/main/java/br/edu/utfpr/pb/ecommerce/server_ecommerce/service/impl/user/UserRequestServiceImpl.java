@@ -1,21 +1,23 @@
 package br.edu.utfpr.pb.ecommerce.server_ecommerce.service.impl.user;
 
-import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.user.UserRequestDTO;
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.user.UserUpdateDTO;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.exception.UserNotFoundException;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.User;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.repository.UserRepository;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.AuthService;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.IUser.IUserRequestService;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.impl.CRUD.CrudRequestServiceImpl;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import static br.edu.utfpr.pb.ecommerce.server_ecommerce.util.ValidationUtils.validateStringNullOrBlank;
 
 
 @Service
-public class UserRequestServiceImpl extends CrudRequestServiceImpl<User, Long> implements IUserRequestService {
+public class UserRequestServiceImpl extends CrudRequestServiceImpl<User, UserUpdateDTO, Long> implements IUserRequestService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -49,38 +51,58 @@ public class UserRequestServiceImpl extends CrudRequestServiceImpl<User, Long> i
     }
 
     @Override
+    @Transactional
     public User save(User entity) {
         encodePassword(entity);
         return super.save(entity);
     }
 
     @Override
+    @Transactional
     public User saveAndFlush(User entity) {
         encodePassword(entity);
         return super.saveAndFlush(entity);
     }
 
     @Override
+    @Transactional
     public Iterable<User> save(Iterable<User> iterable) {
         iterable.forEach(this::encodePassword);
         return super.save(iterable);
     }
 
     @Override
-    public User updateUser(Long id, UserRequestDTO dto, ModelMapper modelMapper) {
+    @Transactional
+    public User update(Long id, UserUpdateDTO dto) {
         User existingUser = findAndValidateUser(id);
 
-        modelMapper.map(dto, existingUser);
+        if (validateStringNullOrBlank(dto.getUsername())) {
+            existingUser.setUsername(dto.getUsername());
+        }
 
-        if (dto.getPassword() != null && !dto.getPassword().isEmpty()) {
+        if (validateStringNullOrBlank(dto.getPassword())) {
+            existingUser.setPassword(dto.getPassword());
             encodePassword(existingUser);
         }
         return userRepository.save(existingUser);
     }
 
     @Override
-    public void deleteUser(Long id) {
+    @Transactional
+    public void deleteById(Long id) {
         User existingUser = findAndValidateUser(id);
         userRepository.delete(existingUser);
+    }
+
+    @Override
+    @Transactional
+    public void deleteAll() {
+        super.deleteAll();
+    }
+
+    @Override
+    @Transactional
+    public void delete(Iterable<? extends User> iterable) {
+        super.delete(iterable);
     }
 }
