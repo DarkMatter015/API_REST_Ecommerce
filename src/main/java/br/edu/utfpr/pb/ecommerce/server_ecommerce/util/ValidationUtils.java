@@ -1,7 +1,6 @@
 package br.edu.utfpr.pb.ecommerce.server_ecommerce.util;
 
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.exception.InvalidQuantityException;
-import org.modelmapper.ModelMapper;
 
 public final class ValidationUtils {
     private ValidationUtils() {}
@@ -12,7 +11,7 @@ public final class ValidationUtils {
         }
     }
 
-    public static <T, D> D convertToDTOGeneric(T entity, Class<D> dtoClass, ModelMapper modelMapper) {
-        return modelMapper.map(entity, dtoClass);
+    public static boolean validateStringNullOrBlank(String fieldName) {
+        return (fieldName != null && !fieldName.isBlank());
     }
 }

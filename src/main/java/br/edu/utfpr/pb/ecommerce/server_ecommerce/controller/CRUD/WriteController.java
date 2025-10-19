@@ -1,7 +1,6 @@
 package br.edu.utfpr.pb.ecommerce.server_ecommerce.controller.CRUD;
 
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.ICRUD.ICrudRequestService;
-import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.ICRUD.ICrudResponseService;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -10,51 +9,57 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
 
-// T = tipo da classe (User, Category...), D = tipo do DTO (Request, Response), ID = atributo da chave primária da classe
-public abstract class WriteController<T, D, RD, ID extends Serializable> {
-    protected abstract ICrudRequestService<T, ID> getService();
-    protected abstract ICrudResponseService<T, ID> getResponseService();
-    protected abstract ModelMapper getModelMapper();
+// T = class type (User, Category...), D = DTO type (Request), RD = DTO type (Response), UD = DTO type (Update), ID = primary key attribute of the class
+public abstract class WriteController<T, D, RD, UD, ID extends Serializable> {
+
+    private final ICrudRequestService<T, UD, ID> service;
+    protected final ModelMapper modelMapper; // 'protected' to be used by 'hooks'
 
     private final Class<T> typeClass;
-    private final Class<D> typeDtoClass;
     private final Class<RD> typeDtoResponseClass;
 
-    public WriteController(Class<T> typeClass, Class<D> typeDtoClass, Class<RD> typeDtoResponseClass) {
+    public WriteController(ICrudRequestService<T, UD, ID> service,
+                           ModelMapper modelMapper,
+                           Class<T> typeClass,
+                           Class<RD> typeDtoResponseClass) {
+        this.service = service;
+        this.modelMapper = modelMapper;
         this.typeClass = typeClass;
-        this.typeDtoClass = typeDtoClass;
         this.typeDtoResponseClass = typeDtoResponseClass;
     }
 
-//    Generaliza o mapeamento de Entidades
-    private <S, T> T map(S source, Class<T> destinationType) {
-        return getModelMapper().map(source, destinationType);
+    // ResponseDTO ==> Entity
+    protected T convertToEntity(D createDto) {
+        return modelMapper.map(createDto, this.typeClass);
+    }
+
+    // Entity ==> ResponseDTO
+    protected RD convertToResponseDto(T entity) {
+        return modelMapper.map(entity, this.typeDtoResponseClass);
     }
 
     @PostMapping
     public ResponseEntity<RD> create(@RequestBody @Valid D entityDto) {
-        T entity = map(entityDto, this.typeClass);
-        T savedEntity = getService().save(entity);
-        return ResponseEntity.status(HttpStatus.CREATED).body(map(savedEntity, this.typeDtoResponseClass));
+        T entity = convertToEntity(entityDto);
+        T savedEntity = service.save(entity);
+
+        RD responseDto = convertToResponseDto(savedEntity);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<RD> update(@PathVariable ID id, @RequestBody @Valid D entityDto) {
+    public ResponseEntity<RD> update(@PathVariable ID id, @RequestBody @Valid UD entityDto) {
 
-        T existingEntity = getResponseService().findById(id);
+        T updatedEntity = this.service.update(id, entityDto);
 
-        // Mapeia os dados do DTO para a entidade existente.
-        map(entityDto, existingEntity.getClass());
+        RD responseDto = convertToResponseDto(updatedEntity);
 
-        // Salva a entidade atualizada.
-        T updatedEntity = getService().save(existingEntity);
-
-        return ResponseEntity.status(HttpStatus.OK).body(map(updatedEntity, this.typeDtoResponseClass));
+        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<Void> delete(@PathVariable ID id) {
-        getService().deleteById(id);
+        this.service.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 }

@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -32,24 +33,28 @@ public class OrderItemsResponseServiceImpl extends CrudResponseServiceImpl<Order
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<OrderItem> findAll() {
         User user = authService.getAuthenticatedUser();
         return orderItemsRepository.findAllByOrder_User_Id(user.getId());
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<OrderItem> findAll(Sort sort) {
         User user = authService.getAuthenticatedUser();
         return orderItemsRepository.findAllByOrder_User_Id(user.getId(), sort);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<OrderItem> findAll(Pageable pageable) {
         User user = authService.getAuthenticatedUser();
         return orderItemsRepository.findAllByOrder_User_Id(user.getId(), pageable);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public OrderItem findById(Long id) {
         User user = authService.getAuthenticatedUser();
         return orderItemsRepository.findByIdAndOrder_User_Id(id, user.getId())
@@ -57,12 +62,14 @@ public class OrderItemsResponseServiceImpl extends CrudResponseServiceImpl<Order
     }
 
     @Override
+    @Transactional(readOnly = true)
     public boolean exists(Long id) {
         User user = authService.getAuthenticatedUser();
         return orderItemsRepository.existsByOrder_User_IdAndId(user.getId(), id);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public long count() {
         User user = authService.getAuthenticatedUser();
         return orderItemsRepository.countByOrder_User_Id(user.getId());

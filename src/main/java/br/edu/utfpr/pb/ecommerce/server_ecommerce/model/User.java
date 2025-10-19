@@ -1,7 +1,7 @@
 package br.edu.utfpr.pb.ecommerce.server_ecommerce.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -24,17 +24,18 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
-    @NotNull
+
+    @NotBlank
     @Size(min = 3, max = 255)
+    @Column(unique = true)
     private String username;
 
-    @NotNull
+    @NotBlank
     @Size(min = 4, max = 255)
     @Column(unique = true)
     private String email;
 
-    @NotNull
+    @NotBlank
     @Size(min = 6)
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).*$")
     private String password;

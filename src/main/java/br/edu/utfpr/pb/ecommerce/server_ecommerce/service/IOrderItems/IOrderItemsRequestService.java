@@ -5,8 +5,6 @@ import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.orderItem.OrderItemUpdateD
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.OrderItem;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.ICRUD.ICrudRequestService;
 
-public interface IOrderItemsRequestService extends ICrudRequestService<OrderItem, Long> {
+public interface IOrderItemsRequestService extends ICrudRequestService<OrderItem, OrderItemUpdateDTO, Long> {
     OrderItem createOrderItem(OrderItemRequestDTO dto);
-    OrderItem updateOrderItem(OrderItemUpdateDTO dto);
-    void deleteOrderItem(Long id);
 }
