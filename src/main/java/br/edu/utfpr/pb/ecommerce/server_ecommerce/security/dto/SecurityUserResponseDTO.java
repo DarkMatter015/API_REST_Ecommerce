@@ -17,12 +17,12 @@ import java.util.Set;
 public class SecurityUserResponseDTO {
 
     private String email;
-    private String username;
+    private String displayName;
     private Set<AuthorityResponseDTO> authorities;
 
     public SecurityUserResponseDTO(User user) {
         this.email = user.getEmail();
-        this.username = user.getUsername();
+        this.displayName = user.getDisplayName();
         this.authorities = new HashSet<>();
         for (GrantedAuthority authority: user.getAuthorities()) {
             authorities.add( new AuthorityResponseDTO(authority.getAuthority()) );
