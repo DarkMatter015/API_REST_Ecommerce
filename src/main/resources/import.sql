@@ -21,6 +21,11 @@ insert into tb_product(name, description, price, url_image, category_id) values 
 INSERT INTO tb_user(display_name, email, password) VALUES ('Administrador', 'admin@teste.com','$2a$10$.PVIfB07x.SfMYTcToxL0.yxcLWU0GbS2NUO1W1QAvqMm/TsFhVem');
 INSERT INTO tb_user(display_name, email, password) VALUES ('Teste', 'test@teste.com','$2a$10$.PVIfB07x.SfMYTcToxL0.yxcLWU0GbS2NUO1W1QAvqMm/TsFhVem');
 
+-- User Roles
+-- Atribui a role 'ADMIN' para o usuário com id 1 (admin@teste.com)
+INSERT INTO tb_user_roles(user_id, role) VALUES (1, 'ADMIN');
+-- Atribui a role 'USER' para o usuário com id 2 (test@teste.com)
+INSERT INTO tb_user_roles(user_id, role) VALUES (2, 'USER');
 
 -- Adrress
 insert into tb_address(user_id, street, number, complement, neighborhood, city, state, cep) values (1, 'Rua das Palmeiras', '120', 'Apto 301', 'Centro', 'Pato Branco', 'PR', '85501000');

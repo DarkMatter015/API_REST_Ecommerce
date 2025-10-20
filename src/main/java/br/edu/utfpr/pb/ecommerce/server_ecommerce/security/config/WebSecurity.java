@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -31,6 +32,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 @Configuration
 public class WebSecurity {
     // Service responsável por buscar um usuário no banco de dados por meio do método loadByUsername()
@@ -81,22 +83,27 @@ public class WebSecurity {
 
         // configura a authorização das requisições
         http.authorizeHttpRequests((authorize) -> {
-            authorize
-                    //permite que a rota "/users" seja acessada, mesmo sem o usuário estar autenticado desde que o método HTTP da requisição seja POST
-                    .requestMatchers(HttpMethod.POST, "/users/**").permitAll()
-                    //permite que a rota "/error" seja acessada por qualquer requisição mesmo o usuário não estando autenticado
-                    .requestMatchers("/error/**").permitAll()
-                    .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
-                    .requestMatchers(HttpMethod.GET, "/categories/**").permitAll();
-
-            // Checa se o ambiente for DEV
             if (isDev) {
                 authorize.requestMatchers("/h2-console/**").permitAll();
-            } else {
-                authorize.requestMatchers("/h2-console/**").denyAll();
             }
 
-            //as demais rotas da aplicação só podem ser acessadas se o usuário estiver autenticado
+            authorize
+                    // ROTAS PÚBLICAS (permitAll)
+                    // Permite o cadastro de novos usuários
+                    .requestMatchers(HttpMethod.POST, "/users").permitAll()
+                    // Permite a visualização de produtos e categorias por qualquer um
+                    .requestMatchers(HttpMethod.GET, "/products/**", "/categories/**").permitAll()
+                    .requestMatchers("/error/**").permitAll()
+
+                    // ROTAS DE ADMIN
+                    // Apenas ADMIN pode gerenciar (criar, editar, deletar) produtos e categorias
+                    .requestMatchers("/products/**", "/categories/**").hasRole("ADMIN")
+                    // Apenas ADMIN pode ver a lista de todos os usuários
+                    .requestMatchers(HttpMethod.GET, "/users/**").hasRole("ADMIN");
+
+                    // ROTAS AUTENTICADAS (USER ou ADMIN)
+                    // Qualquer usuário autenticado pode acessar as demais rotas
+                    // A lógica de negócio nos services já garante que um usuário só acesse seus próprios dados (pedidos, endereços, etc.)
             authorize.anyRequest().authenticated();
             }
         );

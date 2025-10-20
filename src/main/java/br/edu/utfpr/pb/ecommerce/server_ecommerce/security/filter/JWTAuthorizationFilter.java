@@ -59,16 +59,14 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         try {
             DecodedJWT jwt = JWT.require(Algorithm.HMAC512(jwtProperties.getSecret()))
                     .build()
-                    .verify(token); // Não precisa mais do .replace()
+                    .verify(token);
 
             String username = jwt.getSubject();
 
             if (username != null) {
-                List<String> roles = jwt.getClaim("roles").asList(String.class);
-
-                List<GrantedAuthority> authorities = Optional.ofNullable(roles)
-                        .orElse(Collections.emptyList())
-                        .stream()
+                // Extrai a claim de roles. Se a claim não existir ou for nula, retorna uma lista vazia.
+                List<String> roles = jwt.getClaim("roles").asList(String.class) != null ? jwt.getClaim("roles").asList(String.class) : Collections.emptyList();
+                List<GrantedAuthority> authorities = roles.stream()
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
