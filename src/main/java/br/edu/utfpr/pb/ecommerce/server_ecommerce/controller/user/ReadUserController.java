@@ -1,4 +1,4 @@
-package br.edu.utfpr.pb.ecommerce.server_ecommerce.controller;
+package br.edu.utfpr.pb.ecommerce.server_ecommerce.controller.user;
 
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.controller.CRUD.WriteController;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.user.UserRequestDTO;
@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("users")
-public class UserController extends WriteController<User, UserRequestDTO, UserResponseDTO, UserUpdateDTO, Long> {
+public class ReadUserController extends WriteController<User, UserRequestDTO, UserResponseDTO, UserUpdateDTO, Long> {
     private final IUserRequestService userRequestService;
 
-    public UserController(IUserRequestService userRequestService, ModelMapper modelMapper) {
+    public ReadUserController(IUserRequestService userRequestService, ModelMapper modelMapper) {
         super(userRequestService, modelMapper, User.class, UserResponseDTO.class);
         this.userRequestService = userRequestService;
     }

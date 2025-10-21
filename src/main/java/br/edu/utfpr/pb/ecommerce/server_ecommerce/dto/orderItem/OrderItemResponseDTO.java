@@ -1,6 +1,6 @@
 package br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.orderItem;
 
-import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.product.ProductDTO;
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.product.ProductResponseDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,7 +16,7 @@ public class OrderItemResponseDTO {
 
     private Long orderId;
 
-    private ProductDTO product;
+    private ProductResponseDTO product;
 
     private BigDecimal totalPrice;
 
