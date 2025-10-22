@@ -1,33 +1,21 @@
 package br.edu.utfpr.pb.ecommerce.server_ecommerce.controller.user;
 
-import br.edu.utfpr.pb.ecommerce.server_ecommerce.controller.CRUD.WriteController;
-import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.user.UserRequestDTO;
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.controller.CRUD.ReadController;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.user.UserResponseDTO;
-import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.user.UserUpdateDTO;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.User;
-import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.IUser.IUserRequestService;
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.IUser.IUserResponseService;
+import jakarta.annotation.security.RolesAllowed;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
 @RequestMapping("users")
-public class ReadUserController extends WriteController<User, UserRequestDTO, UserResponseDTO, UserUpdateDTO, Long> {
-    private final IUserRequestService userRequestService;
+@RolesAllowed("ADMIN")
+public class ReadUserController extends ReadController<User, UserResponseDTO, Long> {
 
-    public ReadUserController(IUserRequestService userRequestService, ModelMapper modelMapper) {
-        super(userRequestService, modelMapper, User.class, UserResponseDTO.class);
-        this.userRequestService = userRequestService;
-    }
-
-    @Override
-    @DeleteMapping("{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        userRequestService.deleteById(id);
-        return ResponseEntity.noContent().build();
+    public ReadUserController(IUserResponseService service, ModelMapper modelMapper) {
+        super(UserResponseDTO.class, service, modelMapper);
     }
 }

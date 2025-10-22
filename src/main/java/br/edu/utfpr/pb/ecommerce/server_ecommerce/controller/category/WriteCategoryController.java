@@ -7,10 +7,9 @@ import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.category.CategoryUpdateDTO
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.Category;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.iCategory.ICategoryRequestService;
 import jakarta.annotation.security.RolesAllowed;
-import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("categories")
@@ -20,20 +19,4 @@ public class WriteCategoryController extends WriteController<Category, CategoryR
         super(service, modelMapper, Category.class, CategoryResponseDTO.class);
     }
 
-    @Override
-    public ResponseEntity<CategoryResponseDTO> create(@RequestBody @Valid CategoryRequestDTO entityDto) {
-        return super.create(entityDto);
-    }
-
-    @Override
-    @PutMapping("{id}")
-    public ResponseEntity<CategoryResponseDTO> update(@PathVariable Long id, @RequestBody @Valid CategoryUpdateDTO entityDto) {
-        return super.update(id, entityDto);
-    }
-
-    @Override
-    @DeleteMapping("{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        return super.delete(id);
-    }
 }

@@ -3,6 +3,7 @@ package br.edu.utfpr.pb.ecommerce.server_ecommerce.service.impl.user;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.user.UserUpdateDTO;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.exception.UserNotFoundException;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.User;
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.enums.Role;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.repository.UserRepository;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.AuthService;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.IUser.IUserRequestService;
@@ -38,6 +39,10 @@ public class UserRequestServiceImpl extends CrudRequestServiceImpl<User, UserUpd
 
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found."));
+
+        if (authenticatedUser.getRoles().contains(Role.ADMIN)){
+            return existingUser;
+        }
 
         if (!existingUser.getId().equals(authenticatedUser.getId())) {
             throw new AccessDeniedException("You don't have permission to modify this user.");
