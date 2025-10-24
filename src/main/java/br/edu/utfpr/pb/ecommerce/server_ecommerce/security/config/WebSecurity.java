@@ -1,9 +1,9 @@
 package br.edu.utfpr.pb.ecommerce.server_ecommerce.security.config;
 
-import br.edu.utfpr.pb.ecommerce.server_ecommerce.security.handler.CustomAuthenticationFailureHandler;
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.security.JwtProperties;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.security.filter.JWTAuthenticationFilter;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.security.filter.JWTAuthorizationFilter;
-import br.edu.utfpr.pb.ecommerce.server_ecommerce.security.JwtProperties;
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.security.handler.CustomAuthenticationFailureHandler;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.AuthService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -32,7 +31,6 @@ import java.util.Arrays;
 import java.util.List;
 
 @EnableWebSecurity
-@EnableMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 @Configuration
 public class WebSecurity {
     // Service responsável por buscar um usuário no banco de dados por meio do método loadByUsername()
@@ -70,6 +68,7 @@ public class WebSecurity {
         if (isDev) {
             http.headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
         }
+        System.out.println("isDev: " + isDev + "\nActive Profiles: " + Arrays.toString(env.getActiveProfiles()) + "\n");
 
         // desabilita o uso de csrf
         http.csrf(AbstractHttpConfigurer::disable);

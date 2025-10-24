@@ -1,7 +1,7 @@
-package br.edu.utfpr.pb.ecommerce.server_ecommerce.controller;
+package br.edu.utfpr.pb.ecommerce.server_ecommerce.controller.category;
 
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.controller.CRUD.ReadController;
-import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.category.CategoryDTO;
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.category.CategoryResponseDTO;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.Category;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.iCategory.ICategoryResponseService;
 import org.modelmapper.ModelMapper;
@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("categories")
-public class CategoryController extends ReadController<Category, CategoryDTO, Long> {
+public class ReadCategoryController extends ReadController<Category, CategoryResponseDTO, Long> {
 
-    public CategoryController(ICategoryResponseService categoryResponseService, ModelMapper modelMapper) {
-        super(CategoryDTO.class, categoryResponseService, modelMapper);
+    public ReadCategoryController(ICategoryResponseService categoryResponseService, ModelMapper modelMapper) {
+        super(CategoryResponseDTO.class, categoryResponseService, modelMapper);
     }
 }

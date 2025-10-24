@@ -1,5 +1,6 @@
 package br.edu.utfpr.pb.ecommerce.server_ecommerce.controller.orderItems;
 
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.controller.CRUD.WriteController;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.orderItem.OrderItemRequestDTO;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.orderItem.OrderItemResponseDTO;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.orderItem.OrderItemUpdateDTO;
@@ -15,32 +16,33 @@ import static br.edu.utfpr.pb.ecommerce.server_ecommerce.util.MapperUtils.map;
 
 @RestController
 @RequestMapping("orderItems")
-public class WriteOrderItemsController {
+public class WriteOrderItemsController extends WriteController<OrderItem, OrderItemRequestDTO, OrderItemResponseDTO, OrderItemUpdateDTO, Long> {
     private final OrderItemsRequestServiceImpl orderItemsRequestService;
     private final ModelMapper modelMapper;
 
     public WriteOrderItemsController(OrderItemsRequestServiceImpl orderItemsRequestService, ModelMapper modelMapper) {
+        super(orderItemsRequestService, modelMapper, OrderItem.class, OrderItemResponseDTO.class);
         this.orderItemsRequestService = orderItemsRequestService;
         this.modelMapper = modelMapper;
     }
 
-    @PostMapping
-    public ResponseEntity<OrderItemResponseDTO> createOrderItem(@RequestBody @Valid OrderItemRequestDTO dto) {
+    @Override
+    public ResponseEntity<OrderItemResponseDTO> create(@RequestBody @Valid OrderItemRequestDTO dto) {
         OrderItem itemSalvo = orderItemsRequestService.createOrderItem(dto);
         OrderItemResponseDTO response = map(itemSalvo, OrderItemResponseDTO.class, modelMapper);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PutMapping("{id}")
-    public ResponseEntity<OrderItemResponseDTO> updateOrder(@PathVariable Long id, @RequestBody @Valid OrderItemUpdateDTO updateDTO) {
-        OrderItem orderItem = orderItemsRequestService.update(id, updateDTO);
+    @Override
+    public ResponseEntity<OrderItemResponseDTO> update(@PathVariable Long id, @RequestBody @Valid OrderItemUpdateDTO updateDto) {
+        OrderItem orderItem = orderItemsRequestService.update(id, updateDto);
         OrderItemResponseDTO orderItemResponseDTO = map(orderItem, OrderItemResponseDTO.class, modelMapper);
 
         return ResponseEntity.status(HttpStatus.OK).body(orderItemResponseDTO);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteOrderItem(@PathVariable Long id) {
+    @Override
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         orderItemsRequestService.deleteById(id);
         return ResponseEntity.noContent().build();
     }

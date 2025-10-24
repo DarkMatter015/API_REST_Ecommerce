@@ -88,31 +88,38 @@ public class AddressRequestServiceImpl extends CrudRequestServiceImpl<Address, A
         User user = authService.getAuthenticatedUser();
         Address address = findAndValidateAddress(id, user);
 
-        if(validateStringNullOrBlank(updateDTO.getStreet())) {
+        if(updateDTO.getStreet() != null) {
+            validateStringNullOrBlank(updateDTO.getStreet());
             address.setStreet(updateDTO.getStreet());
         }
 
-        if(validateStringNullOrBlank(updateDTO.getNumber())) {
+        if(updateDTO.getNumber() != null) {
+            validateStringNullOrBlank(updateDTO.getNumber());
             address.setNumber(updateDTO.getNumber());
         }
 
-        if(validateStringNullOrBlank(updateDTO.getComplement())) {
+        if(updateDTO.getComplement() != null) {
+            validateStringNullOrBlank(updateDTO.getComplement());
             address.setComplement(updateDTO.getComplement());
         }
 
-        if(validateStringNullOrBlank(updateDTO.getNeighborhood())) {
+        if(updateDTO.getNeighborhood() != null) {
+            validateStringNullOrBlank(updateDTO.getNeighborhood());
             address.setNeighborhood(updateDTO.getNeighborhood());
         }
 
-        if(validateStringNullOrBlank(updateDTO.getCity())) {
+        if(updateDTO.getCity() != null) {
+            validateStringNullOrBlank(updateDTO.getCity());
             address.setCity(updateDTO.getCity());
         }
 
-        if(validateStringNullOrBlank(updateDTO.getState())) {
+        if(updateDTO.getState() != null) {
+            validateStringNullOrBlank(updateDTO.getState());
             address.setState(updateDTO.getState());
         }
 
-        if(validateStringNullOrBlank(updateDTO.getCep())) {
+        if(updateDTO.getCep() != null) {
+            validateStringNullOrBlank(updateDTO.getCep());
             address.setCep(updateDTO.getCep());
         }
 
