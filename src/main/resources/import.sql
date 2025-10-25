@@ -17,9 +17,9 @@ insert into tb_product(name, description, price, url_image, category_id) values 
 insert into tb_product(name, description, price, url_image, category_id) values ('Roteador Wi-Fi 5.4GhZ','Roteador Wi-Fi 5.4GhZ, 6 antenas...',1299.0, 'https://img.kalunga.com.br/fotosdeproducts/610540z_1.jpg', 1);
 
 
--- User - password: 123
-INSERT INTO tb_user(display_name, email, password) VALUES ('Administrador', 'admin@teste.com','$2a$10$.PVIfB07x.SfMYTcToxL0.yxcLWU0GbS2NUO1W1QAvqMm/TsFhVem');
-INSERT INTO tb_user(display_name, email, password) VALUES ('Teste', 'test@teste.com','$2a$10$.PVIfB07x.SfMYTcToxL0.yxcLWU0GbS2NUO1W1QAvqMm/TsFhVem');
+-- User - password: 123456
+INSERT INTO tb_user(display_name, email, password) VALUES ('Administrador', 'admin@teste.com','$2a$10$LOqePml/koRGsk2YAIOFI.1YNKZg7EsQ5BAIuYP1nWOyYRl21dlne');
+INSERT INTO tb_user(display_name, email, password) VALUES ('Teste', 'test@teste.com','$2a$10$LOqePml/koRGsk2YAIOFI.1YNKZg7EsQ5BAIuYP1nWOyYRl21dlne');
 
 -- User Roles
 -- Atribui a role 'ADMIN' para o usuário com id 1 (admin@teste.com)
