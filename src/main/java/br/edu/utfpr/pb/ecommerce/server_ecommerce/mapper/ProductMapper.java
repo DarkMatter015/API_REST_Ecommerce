@@ -23,7 +23,6 @@ public class ProductMapper {
         product.setDescription(dto.getDescription());
         product.setPrice(dto.getPrice());
         product.setUrlImage(dto.getUrlImage());
-        product.setImages(dto.getImages());
         product.setQuantityAvailableInStock(dto.getQuantityAvailableInStock());
 
         Category category = categoryRepository.findById(dto.getCategoryId())

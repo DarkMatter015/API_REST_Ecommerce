@@ -9,7 +9,6 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @Entity
 @Table(name = "tb_product")
@@ -36,8 +35,7 @@ public class Product {
     @Column(name = "url_image")
     private String urlImage;
 
-    private List<String> images;
-
+    @Column(name = "quantity_available_in_stock")
     @NotNull
     @Min(value = 0, message = "The quantity of products cannot be negative")
     private Integer quantityAvailableInStock;

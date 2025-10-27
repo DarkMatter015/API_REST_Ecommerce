@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -24,8 +23,6 @@ public class ProductRequestDTO {
     private BigDecimal price;
 
     private String urlImage;
-
-    private List<String> images;
 
     @NotNull
     @Min(value = 0, message = "The quantity of products cannot be negative")
