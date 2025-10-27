@@ -1,4 +1,4 @@
-package br.edu.utfpr.pb.ecommerce.server_ecommerce.util;
+package br.edu.utfpr.pb.ecommerce.server_ecommerce.mapper;
 
 import org.modelmapper.ModelMapper;
 

@@ -12,7 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static br.edu.utfpr.pb.ecommerce.server_ecommerce.util.MapperUtils.map;
+import static br.edu.utfpr.pb.ecommerce.server_ecommerce.mapper.MapperUtils.map;
 
 @RestController
 @RequestMapping("orderItems")
@@ -31,20 +31,6 @@ public class WriteOrderItemsController extends WriteController<OrderItem, OrderI
         OrderItem itemSalvo = orderItemsRequestService.createOrderItem(dto);
         OrderItemResponseDTO response = map(itemSalvo, OrderItemResponseDTO.class, modelMapper);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
-    }
-
-    @Override
-    public ResponseEntity<OrderItemResponseDTO> update(@PathVariable Long id, @RequestBody @Valid OrderItemUpdateDTO updateDto) {
-        OrderItem orderItem = orderItemsRequestService.update(id, updateDto);
-        OrderItemResponseDTO orderItemResponseDTO = map(orderItem, OrderItemResponseDTO.class, modelMapper);
-
-        return ResponseEntity.status(HttpStatus.OK).body(orderItemResponseDTO);
-    }
-
-    @Override
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        orderItemsRequestService.deleteById(id);
-        return ResponseEntity.noContent().build();
     }
 
 }

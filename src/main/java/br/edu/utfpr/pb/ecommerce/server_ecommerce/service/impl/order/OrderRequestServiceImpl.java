@@ -20,8 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static br.edu.utfpr.pb.ecommerce.server_ecommerce.util.MapperUtils.map;
-import static br.edu.utfpr.pb.ecommerce.server_ecommerce.util.ValidationUtils.validateQuantity;
+import static br.edu.utfpr.pb.ecommerce.server_ecommerce.mapper.MapperUtils.map;
+import static br.edu.utfpr.pb.ecommerce.server_ecommerce.util.ValidationUtils.validateQuantityOfProducts;
 
 @Service
 public class OrderRequestServiceImpl extends CrudRequestServiceImpl<Order, OrderUpdateDTO, Long> implements IOrderRequestService {
@@ -61,8 +61,10 @@ public class OrderRequestServiceImpl extends CrudRequestServiceImpl<Order, Order
 
                     OrderItem item = new OrderItem();
                     item.setProduct(product);
-                    validateQuantity(itemDTO.getQuantity());
+                    validateQuantityOfProducts(itemDTO.getQuantity(), product);
                     item.setQuantity(itemDTO.getQuantity());
+                    product.decreaseQuantity(itemDTO.getQuantity());
+
                     item.setOrder(order);
 
                     return item;

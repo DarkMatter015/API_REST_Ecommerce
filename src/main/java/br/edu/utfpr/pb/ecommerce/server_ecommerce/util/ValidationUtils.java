@@ -3,15 +3,16 @@ package br.edu.utfpr.pb.ecommerce.server_ecommerce.util;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.exception.util.InvalidPriceException;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.exception.util.InvalidQuantityException;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.exception.util.InvalidStringException;
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.Product;
 
 import java.math.BigDecimal;
 
 public final class ValidationUtils {
     private ValidationUtils() {}
 
-    public static void validateQuantity(Integer quantity) {
-        if (quantity == null || quantity <= 0) {
-            throw new InvalidQuantityException("Quantity must be a positive number.");
+    public static void validateQuantityOfProducts(Integer quantity, Product product) {
+        if (quantity == null || quantity > product.getQuantityAvailableInStock()) {
+            throw new InvalidQuantityException("Quantity greater than that available in the product stock.");
         }
     }
 

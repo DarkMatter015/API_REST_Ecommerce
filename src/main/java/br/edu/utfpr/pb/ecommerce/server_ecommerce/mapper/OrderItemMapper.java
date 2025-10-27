@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static br.edu.utfpr.pb.ecommerce.server_ecommerce.util.MapperUtils.map;
+import static br.edu.utfpr.pb.ecommerce.server_ecommerce.mapper.MapperUtils.map;
 
 @Component
 @RequiredArgsConstructor

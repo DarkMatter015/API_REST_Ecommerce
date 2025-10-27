@@ -19,7 +19,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static br.edu.utfpr.pb.ecommerce.server_ecommerce.util.ValidationUtils.validateQuantity;
+import static br.edu.utfpr.pb.ecommerce.server_ecommerce.util.ValidationUtils.validateQuantityOfProducts;
 
 @Service
 public class OrderItemsRequestServiceImpl extends CrudRequestServiceImpl<OrderItem, OrderItemUpdateDTO, Long> implements IOrderItemsRequestService {
@@ -52,8 +52,21 @@ public class OrderItemsRequestServiceImpl extends CrudRequestServiceImpl<OrderIt
         User user = authService.getAuthenticatedUser();
         OrderItem item = findAndValidateOrderItem(id, user);
 
-        validateQuantity(updateDTO.getQuantity());
-        item.setQuantity(updateDTO.getQuantity());
+        if (updateDTO.getQuantity() != null) {
+
+            if (updateDTO.getQuantity() > item.getQuantity()) {
+                Integer decreaseQuantity = updateDTO.getQuantity() - item.getQuantity();
+
+                validateQuantityOfProducts(decreaseQuantity, item.getProduct());
+                item.setQuantity(updateDTO.getQuantity());
+                item.getProduct().decreaseQuantity(decreaseQuantity);
+            }
+            else if (updateDTO.getQuantity() < item.getQuantity()) {
+                item.getProduct().increaseQuantity(item.getQuantity() - updateDTO.getQuantity());
+                item.setQuantity(updateDTO.getQuantity());
+            }
+        }
+
 
         return orderItemsRepository.save(item);
     }
@@ -72,8 +85,9 @@ public class OrderItemsRequestServiceImpl extends CrudRequestServiceImpl<OrderIt
         item.setOrder(order);
         item.setProduct(product);
 
-        validateQuantity(dto.getQuantity());
+        validateQuantityOfProducts(dto.getQuantity(), product);
         item.setQuantity(dto.getQuantity());
+        product.decreaseQuantity(dto.getQuantity());
 
         order.addItem(item);
 
