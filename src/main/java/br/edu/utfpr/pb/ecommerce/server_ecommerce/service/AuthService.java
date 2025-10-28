@@ -27,6 +27,10 @@ public class AuthService implements UserDetailsService {
         return user;
     }
 
+    public boolean isAuthenticated() {
+        return !SecurityContextHolder.getContext().getAuthentication().getName().contains("anonymous");
+    }
+
     public User getAuthenticatedUser() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByEmail(email);

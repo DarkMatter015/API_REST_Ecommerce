@@ -12,7 +12,6 @@ import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.AuthService;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.IOrder.IOrderRequestService;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.impl.CRUD.CrudRequestServiceImpl;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,8 +19,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static br.edu.utfpr.pb.ecommerce.server_ecommerce.util.MapperUtils.map;
-import static br.edu.utfpr.pb.ecommerce.server_ecommerce.util.ValidationUtils.validateQuantity;
+import static br.edu.utfpr.pb.ecommerce.server_ecommerce.mapper.MapperUtils.map;
+import static br.edu.utfpr.pb.ecommerce.server_ecommerce.util.ValidationUtils.validateQuantityOfProducts;
 
 @Service
 public class OrderRequestServiceImpl extends CrudRequestServiceImpl<Order, OrderUpdateDTO, Long> implements IOrderRequestService {
@@ -32,6 +31,7 @@ public class OrderRequestServiceImpl extends CrudRequestServiceImpl<Order, Order
     private final ModelMapper modelMapper;
 
     public OrderRequestServiceImpl(OrderRepository orderRepository, ProductRepository productRepository, AuthService authService, ModelMapper modelMapper) {
+        super(orderRepository);
         this.orderRepository = orderRepository;
         this.productRepository = productRepository;
         this.authService = authService;
@@ -61,17 +61,14 @@ public class OrderRequestServiceImpl extends CrudRequestServiceImpl<Order, Order
 
                     OrderItem item = new OrderItem();
                     item.setProduct(product);
-                    validateQuantity(itemDTO.getQuantity());
+                    validateQuantityOfProducts(itemDTO.getQuantity(), product);
                     item.setQuantity(itemDTO.getQuantity());
+                    product.decreaseQuantity(itemDTO.getQuantity());
+
                     item.setOrder(order);
 
                     return item;
                 }).toList();
-    }
-
-    @Override
-    protected JpaRepository<Order, Long> getRepository() {
-        return orderRepository;
     }
 
     @Override

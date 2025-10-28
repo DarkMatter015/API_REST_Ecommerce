@@ -9,7 +9,6 @@ import br.edu.utfpr.pb.ecommerce.server_ecommerce.repository.AddressRepository;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.AuthService;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.IAddress.IAddressRequestService;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.impl.CRUD.CrudRequestServiceImpl;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +26,7 @@ public class AddressRequestServiceImpl extends CrudRequestServiceImpl<Address, A
     private final AuthService  authService;
 
     public AddressRequestServiceImpl(AddressRepository addressRepository, AuthService authService) {
+        super(addressRepository);
         this.addressRepository = addressRepository;
         this.authService = authService;
     }
@@ -41,11 +41,6 @@ public class AddressRequestServiceImpl extends CrudRequestServiceImpl<Address, A
     private Address findAndValidateAddress(Long id, User user) {
         return addressRepository.findByIdAndUser(id, user)
                 .orElseThrow(() -> new AddressNotFoundException("Address not found."));
-    }
-
-    @Override
-    protected JpaRepository<Address, Long> getRepository() {
-        return addressRepository;
     }
 
     @Override
@@ -88,31 +83,38 @@ public class AddressRequestServiceImpl extends CrudRequestServiceImpl<Address, A
         User user = authService.getAuthenticatedUser();
         Address address = findAndValidateAddress(id, user);
 
-        if(validateStringNullOrBlank(updateDTO.getStreet())) {
+        if(updateDTO.getStreet() != null) {
+            validateStringNullOrBlank(updateDTO.getStreet());
             address.setStreet(updateDTO.getStreet());
         }
 
-        if(validateStringNullOrBlank(updateDTO.getNumber())) {
+        if(updateDTO.getNumber() != null) {
+            validateStringNullOrBlank(updateDTO.getNumber());
             address.setNumber(updateDTO.getNumber());
         }
 
-        if(validateStringNullOrBlank(updateDTO.getComplement())) {
+        if(updateDTO.getComplement() != null) {
+            validateStringNullOrBlank(updateDTO.getComplement());
             address.setComplement(updateDTO.getComplement());
         }
 
-        if(validateStringNullOrBlank(updateDTO.getNeighborhood())) {
+        if(updateDTO.getNeighborhood() != null) {
+            validateStringNullOrBlank(updateDTO.getNeighborhood());
             address.setNeighborhood(updateDTO.getNeighborhood());
         }
 
-        if(validateStringNullOrBlank(updateDTO.getCity())) {
+        if(updateDTO.getCity() != null) {
+            validateStringNullOrBlank(updateDTO.getCity());
             address.setCity(updateDTO.getCity());
         }
 
-        if(validateStringNullOrBlank(updateDTO.getState())) {
+        if(updateDTO.getState() != null) {
+            validateStringNullOrBlank(updateDTO.getState());
             address.setState(updateDTO.getState());
         }
 
-        if(validateStringNullOrBlank(updateDTO.getCep())) {
+        if(updateDTO.getCep() != null) {
+            validateStringNullOrBlank(updateDTO.getCep());
             address.setCep(updateDTO.getCep());
         }
 

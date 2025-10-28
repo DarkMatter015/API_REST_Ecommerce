@@ -16,7 +16,6 @@ public class ReadOrderItemsController extends ReadController<OrderItem, OrderIte
 
     public ReadOrderItemsController(IOrderItemsResponseService orderItemsResponseService, ModelMapper modelMapper, OrderItemMapper orderItemMapper) {
         super(OrderItemResponseDTO.class,  orderItemsResponseService, modelMapper);
-
         this.orderItemMapper = orderItemMapper;
     }
 

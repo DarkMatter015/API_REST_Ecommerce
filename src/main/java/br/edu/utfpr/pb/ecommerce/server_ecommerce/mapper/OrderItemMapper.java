@@ -1,7 +1,7 @@
 package br.edu.utfpr.pb.ecommerce.server_ecommerce.mapper;
 
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.orderItem.OrderItemResponseDTO;
-import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.product.ProductDTO;
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.product.ProductResponseDTO;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.OrderItem;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static br.edu.utfpr.pb.ecommerce.server_ecommerce.util.MapperUtils.map;
+import static br.edu.utfpr.pb.ecommerce.server_ecommerce.mapper.MapperUtils.map;
 
 @Component
 @RequiredArgsConstructor
@@ -35,7 +35,7 @@ public class OrderItemMapper {
         }
 
         if (item.getProduct() != null) {
-            dto.setProduct(map(item.getProduct(), ProductDTO.class, modelMapper));
+            dto.setProduct(map(item.getProduct(), ProductResponseDTO.class, modelMapper));
         }
 
         return dto;

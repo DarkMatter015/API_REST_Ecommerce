@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static br.edu.utfpr.pb.ecommerce.server_ecommerce.util.MapperUtils.map;
+import static br.edu.utfpr.pb.ecommerce.server_ecommerce.mapper.MapperUtils.map;
 
 
 @RestController
@@ -31,10 +31,8 @@ public class WriteAddressController extends WriteController<Address, AddressRequ
 
     @Override
     public ResponseEntity<AddressResponseDTO> create(@RequestBody @Valid AddressRequestDTO address) {
-
         Address addressSalvo = addressRequestService.createAddress(address);
         AddressResponseDTO responseDTO = map(addressSalvo, AddressResponseDTO.class, modelMapper);
-
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 }

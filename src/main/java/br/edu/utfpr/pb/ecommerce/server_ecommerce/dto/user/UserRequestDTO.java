@@ -1,9 +1,14 @@
 package br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.user;
 
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.enums.Role;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -24,4 +29,6 @@ public class UserRequestDTO {
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).*$", message = "Password must contain at least one lowercase letter, one uppercase letter, and one number.")
     private String password;
 
+    @Enumerated(EnumType.STRING)
+    private Set<Role> roles;
 }
