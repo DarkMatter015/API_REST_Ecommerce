@@ -5,8 +5,8 @@ import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.orderItem.OrderItemUpdateD
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.exception.OrderItemNotFoundException;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.exception.OrderNotFoundException;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.exception.ProductNotFoundException;
-import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.OrderItem;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.Order;
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.OrderItem;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.Product;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.User;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.repository.OrderItemsRepository;
@@ -15,7 +15,6 @@ import br.edu.utfpr.pb.ecommerce.server_ecommerce.repository.ProductRepository;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.AuthService;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.IOrderItems.IOrderItemsRequestService;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.impl.CRUD.CrudRequestServiceImpl;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +29,7 @@ public class OrderItemsRequestServiceImpl extends CrudRequestServiceImpl<OrderIt
     private final AuthService authService;
 
     public OrderItemsRequestServiceImpl(OrderItemsRepository orderItemsRepository, ProductRepository productRepository, OrderRepository orderRepository, AuthService authService) {
+        super(orderItemsRepository);
         this.orderItemsRepository = orderItemsRepository;
         this.productRepository = productRepository;
         this.orderRepository = orderRepository;
@@ -41,10 +41,6 @@ public class OrderItemsRequestServiceImpl extends CrudRequestServiceImpl<OrderIt
                 .orElseThrow(() -> new OrderItemNotFoundException("Order item not found or you don't have permission to access it."));
     }
 
-    @Override
-    protected JpaRepository getRepository() {
-        return orderItemsRepository;
-    }
 
     @Override
     @Transactional

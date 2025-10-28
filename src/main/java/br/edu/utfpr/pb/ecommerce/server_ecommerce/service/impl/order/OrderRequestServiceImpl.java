@@ -12,7 +12,6 @@ import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.AuthService;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.IOrder.IOrderRequestService;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.impl.CRUD.CrudRequestServiceImpl;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +31,7 @@ public class OrderRequestServiceImpl extends CrudRequestServiceImpl<Order, Order
     private final ModelMapper modelMapper;
 
     public OrderRequestServiceImpl(OrderRepository orderRepository, ProductRepository productRepository, AuthService authService, ModelMapper modelMapper) {
+        super(orderRepository);
         this.orderRepository = orderRepository;
         this.productRepository = productRepository;
         this.authService = authService;
@@ -69,11 +69,6 @@ public class OrderRequestServiceImpl extends CrudRequestServiceImpl<Order, Order
 
                     return item;
                 }).toList();
-    }
-
-    @Override
-    protected JpaRepository<Order, Long> getRepository() {
-        return orderRepository;
     }
 
     @Override

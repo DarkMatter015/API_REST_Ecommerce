@@ -9,11 +9,11 @@ import br.edu.utfpr.pb.ecommerce.server_ecommerce.repository.CategoryRepository;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.repository.ProductRepository;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.IProduct.IProductRequestService;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.impl.CRUD.CrudRequestServiceImpl;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static br.edu.utfpr.pb.ecommerce.server_ecommerce.util.ValidationUtils.*;
+import static br.edu.utfpr.pb.ecommerce.server_ecommerce.util.ValidationUtils.validatePrice;
+import static br.edu.utfpr.pb.ecommerce.server_ecommerce.util.ValidationUtils.validateStringNullOrBlank;
 
 @Service
 public class ProductRequestServiceImpl extends CrudRequestServiceImpl<Product, ProductUpdateDTO, Long> implements IProductRequestService {
@@ -22,13 +22,9 @@ public class ProductRequestServiceImpl extends CrudRequestServiceImpl<Product, P
     private final CategoryRepository categoryRepository;
 
     public ProductRequestServiceImpl(ProductRepository productRepository, CategoryRepository categoryRepository) {
+        super(productRepository);
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
-    }
-
-    @Override
-    protected JpaRepository<Product, Long> getRepository() {
-        return productRepository;
     }
 
     @Override

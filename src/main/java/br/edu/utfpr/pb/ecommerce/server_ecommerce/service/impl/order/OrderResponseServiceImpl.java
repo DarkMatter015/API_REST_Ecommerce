@@ -10,7 +10,6 @@ import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.impl.CRUD.CrudResponse
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,13 +22,9 @@ public class OrderResponseServiceImpl extends CrudResponseServiceImpl<Order, Lon
     private final AuthService authService;
 
     public OrderResponseServiceImpl(OrderRepository orderRepository, AuthService authService) {
+        super(orderRepository);
         this.orderRepository = orderRepository;
         this.authService = authService;
-    }
-
-    @Override
-    protected JpaRepository<Order, Long> getRepository() {
-        return orderRepository;
     }
 
     @Override

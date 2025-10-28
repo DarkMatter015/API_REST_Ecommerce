@@ -9,7 +9,6 @@ import br.edu.utfpr.pb.ecommerce.server_ecommerce.repository.UserRepository;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.AuthService;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.IUser.IUserRequestService;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.impl.CRUD.CrudRequestServiceImpl;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -28,6 +27,7 @@ public class UserRequestServiceImpl extends CrudRequestServiceImpl<User, UserUpd
     private final AuthService authService;
 
     public UserRequestServiceImpl(UserRepository userRepository, AuthService authService) {
+        super(userRepository);
         this.userRepository = userRepository;
         this.authService = authService;
         this.bCryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -61,11 +61,6 @@ public class UserRequestServiceImpl extends CrudRequestServiceImpl<User, UserUpd
         }
 
         return false;
-    }
-
-    @Override
-    protected JpaRepository<User, Long> getRepository() {
-        return userRepository;
     }
 
     @Override

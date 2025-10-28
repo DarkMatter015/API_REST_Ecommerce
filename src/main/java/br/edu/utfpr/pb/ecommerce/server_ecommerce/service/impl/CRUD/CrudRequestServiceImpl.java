@@ -8,24 +8,28 @@ import java.io.Serializable;
 
 public abstract class CrudRequestServiceImpl<T, UD, ID extends Serializable> implements ICrudRequestService<T, UD, ID> {
 
-    protected abstract JpaRepository<T, ID> getRepository();
-
+    private final JpaRepository<T, ID> repository;
+    
+    public CrudRequestServiceImpl(JpaRepository<T, ID> repository) {
+        this.repository = repository;
+    }
+    
     @Override
     @Transactional
     public T save(T entity) {
-        return getRepository().save(entity);
+        return this.repository.save(entity);
     }
 
     @Override
     @Transactional
     public T saveAndFlush(T entity) {
-        return getRepository().saveAndFlush(entity);
+        return this.repository.saveAndFlush(entity);
     }
 
     @Override
     @Transactional
     public Iterable<T> save(Iterable<T> iterable) {
-        return getRepository().saveAll(iterable);
+        return this.repository.saveAll(iterable);
     }
 
     @Override
@@ -35,18 +39,18 @@ public abstract class CrudRequestServiceImpl<T, UD, ID extends Serializable> imp
     @Override
     @Transactional
     public void deleteById(ID id) {
-        getRepository().deleteById(id);
+        this.repository.deleteById(id);
     }
 
     @Override
     @Transactional
     public void delete(Iterable<? extends T> iterable) {
-        getRepository().deleteAll(iterable);
+        this.repository.deleteAll(iterable);
     }
 
     @Override
     @Transactional
     public void deleteAll() {
-        getRepository().deleteAll();
+        this.repository.deleteAll();
     }
 }

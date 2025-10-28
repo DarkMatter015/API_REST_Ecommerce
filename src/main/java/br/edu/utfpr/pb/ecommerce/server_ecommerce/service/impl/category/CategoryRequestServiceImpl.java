@@ -6,7 +6,6 @@ import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.Category;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.repository.CategoryRepository;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.iCategory.ICategoryRequestService;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.impl.CRUD.CrudRequestServiceImpl;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,12 +17,8 @@ public class CategoryRequestServiceImpl extends CrudRequestServiceImpl<Category,
     private final CategoryRepository categoryRepository;
 
     public CategoryRequestServiceImpl(CategoryRepository categoryRepository) {
+        super(categoryRepository);
         this.categoryRepository = categoryRepository;
-    }
-
-    @Override
-    protected JpaRepository<Category, Long> getRepository() {
-        return this.categoryRepository;
     }
 
     @Override
