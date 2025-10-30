@@ -3,6 +3,7 @@ package br.edu.utfpr.pb.ecommerce.server_ecommerce.service;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.exception.AuthenticatedUserNotFoundException;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.User;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.repository.UserRepository;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -32,11 +33,17 @@ public class AuthService implements UserDetailsService {
     }
 
     public User getAuthenticatedUser() {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userRepository.findByEmail(email);
-        if (user == null) {
-            throw new AuthenticatedUserNotFoundException("Authenticated user not found!");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() ||
+                authentication.getName().equals("anonymousUser")) {
+            throw new AuthenticatedUserNotFoundException("No authenticated user found");
         }
+
+        String email = authentication.getName();
+        User user = userRepository.findByEmail(email);
+
+        if ( user == null) throw new AuthenticatedUserNotFoundException("Authenticated user not found!");
+
         return user;
     }
 }
