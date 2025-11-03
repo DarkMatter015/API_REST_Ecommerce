@@ -1,6 +1,7 @@
 package br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.order;
 
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.orderItem.OrderItemResponseDTO;
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.payment.PaymentResponseDTO;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.EmbeddedAddress;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,4 +24,6 @@ public class OrderResponseDTO {
     private List<OrderItemResponseDTO> orderItems;
 
     private EmbeddedAddress address;
+
+    private PaymentResponseDTO payment;
 }

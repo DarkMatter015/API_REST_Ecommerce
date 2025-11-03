@@ -1,7 +1,7 @@
 package br.edu.utfpr.pb.ecommerce.server_ecommerce.service.impl.category;
 
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.category.CategoryUpdateDTO;
-import br.edu.utfpr.pb.ecommerce.server_ecommerce.exception.CategoryNotFound;
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.exception.CategoryNotFoundException;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.Category;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.repository.CategoryRepository;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.iCategory.ICategoryRequestService;
@@ -25,7 +25,7 @@ public class CategoryRequestServiceImpl extends CrudRequestServiceImpl<Category,
     @Transactional
     public Category update(Long id, CategoryUpdateDTO updateDTO) {
         Category existingCategory = categoryRepository.findById(id)
-                .orElseThrow(() -> new CategoryNotFound("Category not found."));
+                .orElseThrow(() -> new CategoryNotFoundException("Category not found."));
 
         if (updateDTO.getName() != null) {
             validateStringNullOrBlank(updateDTO.getName());

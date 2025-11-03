@@ -26,6 +26,11 @@ public class Order {
 
     @NotNull
     @ManyToOne
+    @JoinColumn(name = "payment_id")
+    private Payment payment;
+
+    @NotNull
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
