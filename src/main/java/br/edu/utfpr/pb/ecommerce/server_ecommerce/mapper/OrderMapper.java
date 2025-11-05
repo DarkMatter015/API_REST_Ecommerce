@@ -4,7 +4,6 @@ import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.order.OrderResponseDTO;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.orderItem.OrderItemResponseDTO;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.payment.PaymentResponseDTO;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.Order;
-import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.Payment;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
@@ -30,9 +29,8 @@ public class OrderMapper {
         List<OrderItemResponseDTO> itensResponse = orderItemMapper.toDTOList(order.getOrderItems());
         responseDTO.setOrderItems(itensResponse);
 
-        PaymentResponseDTO paymentResponseDTO = map(Payment.class, PaymentResponseDTO.class, modelMapper);
+        PaymentResponseDTO paymentResponseDTO = map(order.getPayment(), PaymentResponseDTO.class, modelMapper);
         responseDTO.setPayment(paymentResponseDTO);
-
         return responseDTO;
     }
     
