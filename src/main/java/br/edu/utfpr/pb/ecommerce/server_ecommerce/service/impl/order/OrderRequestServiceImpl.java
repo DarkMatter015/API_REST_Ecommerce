@@ -4,9 +4,11 @@ import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.order.OrderRequestDTO;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.order.OrderUpdateDTO;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.orderItem.OrderItemRequestDTO;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.exception.OrderNotFoundException;
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.exception.PaymentNotFoundException;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.exception.ProductNotFoundException;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.*;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.repository.OrderRepository;
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.repository.PaymentRepository;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.repository.ProductRepository;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.AuthService;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.IOrder.IOrderRequestService;
@@ -27,13 +29,15 @@ public class OrderRequestServiceImpl extends CrudRequestServiceImpl<Order, Order
 
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
+    private final PaymentRepository paymentRepository;
     private final AuthService authService;
     private final ModelMapper modelMapper;
 
-    public OrderRequestServiceImpl(OrderRepository orderRepository, ProductRepository productRepository, AuthService authService, ModelMapper modelMapper) {
+    public OrderRequestServiceImpl(OrderRepository orderRepository, ProductRepository productRepository, PaymentRepository paymentRepository, AuthService authService, ModelMapper modelMapper) {
         super(orderRepository);
         this.orderRepository = orderRepository;
         this.productRepository = productRepository;
+        this.paymentRepository = paymentRepository;
         this.authService = authService;
         this.modelMapper = modelMapper;
     }
@@ -104,6 +108,11 @@ public class OrderRequestServiceImpl extends CrudRequestServiceImpl<Order, Order
         List<OrderItem> itens = getOrderItems(order, dto.getOrderItems());
 
         order.setOrderItems(itens);
+
+        Payment payment = paymentRepository.findById(dto.getPaymentId())
+                .orElseThrow(() -> new PaymentNotFoundException("Payment not found with this id: " + dto.getPaymentId()));
+
+        order.setPayment(payment);
 
         return orderRepository.save(order);
     }

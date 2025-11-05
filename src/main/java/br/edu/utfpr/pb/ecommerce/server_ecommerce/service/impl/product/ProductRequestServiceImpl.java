@@ -1,7 +1,7 @@
 package br.edu.utfpr.pb.ecommerce.server_ecommerce.service.impl.product;
 
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.product.ProductUpdateDTO;
-import br.edu.utfpr.pb.ecommerce.server_ecommerce.exception.CategoryNotFound;
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.exception.CategoryNotFoundException;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.exception.ProductNotFoundException;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.Category;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.Product;
@@ -55,7 +55,7 @@ public class ProductRequestServiceImpl extends CrudRequestServiceImpl<Product, P
 
         if (updateDTO.getCategoryId() != null){
             Category category = categoryRepository.findById(updateDTO.getCategoryId())
-                    .orElseThrow(() -> new CategoryNotFound("Category not found with this id: " + updateDTO.getCategoryId()));
+                    .orElseThrow(() -> new CategoryNotFoundException("Category not found with this id: " + updateDTO.getCategoryId()));
 
             existingProduct.setCategory(category);
         }
