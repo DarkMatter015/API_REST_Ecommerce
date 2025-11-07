@@ -18,6 +18,6 @@ public class OrderItemRequestDTO {
     private Long productId;
 
     @NotNull
-    @Positive
+    @Positive(message = "{field.quantity.min}")
     private Integer quantity;
 }

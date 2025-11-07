@@ -21,12 +21,12 @@ public class UserRequestDTO {
     private String email;
 
     @NotBlank
-    @Size(min = 3, max = 255, message = "Username must have between 3 and 255 characters.")
+    @Size(min = 3, max = 255, message = "{field.displayname.size}")
     private String displayName;
 
     @NotBlank
-    @Size(min = 6, message = "Password must have at least 6 characters.")
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).*$", message = "Password must contain at least one lowercase letter, one uppercase letter, and one number.")
+    @Size(min = 6, message = "{field.password.size}")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).*$", message = "{field.password.pattern}")
     private String password;
 
     @Enumerated(EnumType.STRING)

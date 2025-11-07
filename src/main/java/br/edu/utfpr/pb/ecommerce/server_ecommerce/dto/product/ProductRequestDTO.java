@@ -25,7 +25,7 @@ public class ProductRequestDTO {
     private String urlImage;
 
     @NotNull
-    @Min(value = 0, message = "The quantity of products cannot be negative")
+    @Min(value = 0, message = "{field.quantity.min}")
     private Integer quantityAvailableInStock;
 
     @NotNull
