@@ -29,7 +29,7 @@ public class User implements UserDetails {
     private Long id;
 
     @NotBlank
-    @Size(min = 3, max = 255)
+    @Size(min = 3, max = 255, message = "{field.displayname.size}")
     private String displayName;
 
     @NotBlank
@@ -38,8 +38,8 @@ public class User implements UserDetails {
     private String email;
 
     @NotBlank
-    @Size(min = 6)
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).*$")
+    @Size(min = 6, message = "{field.password.size}")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).*$", message = "{field.password.pattern}")
     private String password;
     
     @ElementCollection(fetch = FetchType.EAGER)

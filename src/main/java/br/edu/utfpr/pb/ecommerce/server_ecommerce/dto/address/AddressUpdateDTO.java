@@ -26,6 +26,6 @@ public class AddressUpdateDTO {
     @Size(min = 2, max = 255)
     private String state;
 
-    @Pattern(regexp = "\\d{8}", message = "The CEP must contain only 8 numbers.")
+    @Pattern(regexp = "\\d{8}", message = "{field.cep.pattern}")
     private String cep;
 }

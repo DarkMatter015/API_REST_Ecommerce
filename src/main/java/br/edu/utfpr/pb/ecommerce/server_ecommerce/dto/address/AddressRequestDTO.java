@@ -32,6 +32,6 @@ public class AddressRequestDTO {
     private String state;
 
     @NotBlank
-    @Pattern(regexp = "\\d{8}", message = "The CEP must contain only 8 numbers.")
+    @Pattern(regexp = "\\d{8}", message = "{field.cep.pattern}")
     private String cep;
 }

@@ -2,6 +2,7 @@ package br.edu.utfpr.pb.ecommerce.server_ecommerce.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -33,6 +34,7 @@ public class OrderItem {
     private BigDecimal totalPrice;
 
     @NotNull
+    @Positive(message = "{field.quantity.min}")
     private Integer quantity;
 
     @PrePersist

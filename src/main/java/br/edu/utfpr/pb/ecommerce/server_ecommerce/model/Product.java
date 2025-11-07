@@ -37,7 +37,7 @@ public class Product {
 
     @Column(name = "quantity_available_in_stock")
     @NotNull
-    @Min(value = 0, message = "The quantity of products cannot be negative")
+    @Min(value = 0, message = "{field.quantity.min}")
     private Integer quantityAvailableInStock;
 
     @ManyToOne
