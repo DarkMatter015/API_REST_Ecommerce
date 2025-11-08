@@ -125,7 +125,7 @@ public class APITest {
     // --- Pedido ---
     @Test
     public void postOrder_whenUserAuthenticated_orderSaved() {
-        String token = obtainAccessToken("Test", "123");
+        String token = obtainAccessToken("admin@test.com", "123456");
         String orderJson = """
                 {
                     "orderItems": [
@@ -136,7 +136,7 @@ public class APITest {
                 """;
 
         ResponseEntity<Object> response =
-                testRestTemplate.withBasicAuth(authenticatedUser.getUsername(), "123")
+                testRestTemplate.withBasicAuth(authenticatedUser.getUsername(), "123456")
                         .postForEntity("/orders", new HttpEntity<>(orderJson, createHeaders(token)),
                                 Object.class);
 
