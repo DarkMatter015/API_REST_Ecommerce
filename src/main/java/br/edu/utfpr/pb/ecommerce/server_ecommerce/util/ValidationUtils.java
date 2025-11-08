@@ -9,7 +9,7 @@ public final class ValidationUtils {
 
     public static void validateQuantityOfProducts(Integer quantity, Product product) {
         if (quantity == null || quantity > product.getQuantityAvailableInStock()) {
-            throw new InvalidQuantityException("Quantity greater than that available in the product stock.");
+            throw new InvalidQuantityException("Quantity greater than that available in the product stock. Quantity available in stock: " + product.getQuantityAvailableInStock());
         }
     }
 

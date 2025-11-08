@@ -89,12 +89,12 @@ public class WebSecurity {
                     // Permite o cadastro de novos usuários
                     .requestMatchers(HttpMethod.POST, "/users").permitAll()
                     // Permite a visualização de produtos e categorias por qualquer um
-                    .requestMatchers(HttpMethod.GET, "/products/**", "/categories/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/products/**", "/categories/**", "/payments/**").permitAll()
                     .requestMatchers("/error/**").permitAll()
 
                     // ROTAS DE ADMIN
                     // Apenas ADMIN pode gerenciar (criar, editar, deletar) produtos e categorias
-                    .requestMatchers("/products/**", "/categories/**").hasRole("ADMIN")
+                    .requestMatchers("/products/**", "/categories/**", "/payments/**").hasRole("ADMIN")
                     // Apenas ADMIN pode ver a lista de todos os usuários
                     .requestMatchers(HttpMethod.GET, "/users/**").hasRole("ADMIN");
 
