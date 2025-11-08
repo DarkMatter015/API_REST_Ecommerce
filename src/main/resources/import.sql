@@ -1,9 +1,9 @@
 -- Category
-insert into tb_category(name) values ('Informática');
-insert into tb_category(name) values ('UD');
-insert into tb_category(name) values ('Cozinha');
-insert into tb_category(name) values ('Móveis');
-insert into tb_category(name) values ('Eletrônico');
+insert into tb_category(name) values ('Violões');
+insert into tb_category(name) values ('Guitarras');
+insert into tb_category(name) values ('Baterias');
+insert into tb_category(name) values ('Teclados');
+insert into tb_category(name) values ('Acessórios');
 
 -- Payment
 insert into tb_payment(name) values ('PIX');
@@ -13,15 +13,14 @@ insert into tb_payment(name) values ('BOLETO');
 
 
 -- Product
-insert into tb_product(name, description, price, url_image, quantity_available_in_stock, category_id) values ('Refrigerador 429L','Refrigerador 429L Branco, duplex....',1990.0, 'https://cdn.leroymerlin.com.br/products/geladeira_brastemp_frost_free_duplex_429_litros_branca_com_tw_1552511408_5919_600x600.jpg', 10, 2);
-insert into tb_product(name, description, price, url_image, quantity_available_in_stock, category_id) values ('Notebook Arus 15.6','Notebook Arus 15.6 Core I7, 16Gb Ram...',2449.0, 'https://m.media-amazon.com/images/I/61FDo2FhQDL._UF894,1000_QL80_.jpg', 15, 1);
-insert into tb_product(name, description, price, url_image, quantity_available_in_stock, category_id) values ('Monitor 27pol','Monitor Gamer 27pol 144Hz, 1ms',1129.99, 'https://media.pichau.com.br/media/catalog/product/cache/2f958555330323e505eba7ce930bdf27/2/7/27gn65r-bawzm2.jpg', 20, 1);
-insert into tb_product(name, description, price, url_image, quantity_available_in_stock, category_id) values ('Kit Teclado e Mouse','Kit com teclado ABNT e mouse com 5 botões',199.0, 'https://images.tcdn.com.br/img/img_prod/406359/combo_teclado_abnt2_led_rainbow_anti_ghosting_mouse_4_botoes_2400dpi_clanm_blacknox_gamer_7167_1_06ecde1b62c217264faed7caca9a73d0.jpg', 30, 1);
-insert into tb_product(name, description, price, url_image, quantity_available_in_stock, category_id) values ('Smartphone XYZ','Smatphone com tela de 9pol, 12GB....',9999.0, 'https://imgs.casasbahia.com.br/1570518802/1xg.jpg', 5, 5);
-insert into tb_product(name, description, price, url_image, quantity_available_in_stock, category_id) values ('TV LCD 75pol','TV LCD 75pol, 5 HDMI...',7555.0, 'https://i.zst.com.br/thumbs/12/27/e/-1103503572.jpg', 8, 5);
-insert into tb_product(name, description, price, url_image, quantity_available_in_stock, category_id) values ('Fogão 6 Bocas','Fogão 6 Bocas em aço inox, ...', 799.99, 'https://consul.vtexassets.com/arquivos/ids/230022-800-800?v=637976381016900000&width=800&height=800&aspect=true', 12, 3);
-insert into tb_product(name, description, price, url_image, quantity_available_in_stock, category_id) values ('Roteador Wi-Fi 5.4GhZ','Roteador Wi-Fi 5.4GhZ, 6 antenas...',1299.0, 'https://img.kalunga.com.br/fotosdeproducts/610540z_1.jpg', 25, 1);
-
+insert into tb_product(name, description, price, url_image, quantity_available_in_stock, category_id) values ('Guitarra Fender Stratocaster','Guitarra Fender Stratocaster American Standard, corpo em alder, 3 captadores single coil.',8990.00,'https://cdn.awsli.com.br/600x700/2192/2192466/produto/191945305/guitarra-fender-player-stratocaster-preta-gxsn1wl4f0.jpg',8,2);
+insert into tb_product(name, description, price, url_image, quantity_available_in_stock, category_id) values ('Violão Yamaha C40','Violão clássico Yamaha C40II com tampo em spruce e encordoamento de nylon, ideal para iniciantes e estudantes.',1049.00,'https://cdn.awsli.com.br/600x700/2192/2192466/produto/188882313/violao-classico-yamaha-c40ii-nylon-natural-6sfsgb5g5c.jpg',15,1);
+insert into tb_product(name, description, price, url_image, quantity_available_in_stock, category_id) values ('Teclado Yamaha PSR-E373','Teclado portátil de 61 teclas sensíveis ao toque, com 622 timbres, modos de aprendizagem e conexão USB-MIDI.',2199.99,'https://cdn.awsli.com.br/600x700/2192/2192466/produto/182123466/teclado-yamaha-psr-e373-portatil-61-teclas-ufl9v7w39g.jpg',12,4);
+insert into tb_product(name, description, price, url_image, quantity_available_in_stock, category_id) values ('Teclado Controlador MIDI AKAI MPK Mini MK3','Controlador MIDI com 25 teclas, 8 pads MPC e knobs programáveis, ideal para produção musical.',1299.00,'https://cdn.awsli.com.br/600x700/2192/2192466/produto/176347977/controlador-midi-akai-mpk-mini-mk3-25-teclas-pret-6t4oq2ulrt.jpg',18,4);
+insert into tb_product(name, description, price, url_image, quantity_available_in_stock, category_id) values ('Cabo P10 Santo Angelo 5m','Cabo P10 mono 5 metros, blindagem dupla e conectores banhados a níquel, ideal para instrumentos e amplificadores.',119.90,'https://cdn.awsli.com.br/600x700/2192/2192466/produto/176418781/cabo-santo-angelo-p10-monoxp10-mono-5m-sil-3fjix02u1e.jpg',35,5);
+insert into tb_product(name, description, price, url_image, quantity_available_in_stock, category_id) values ('Pedal Boss DS-1 Distortion','Pedal de distorção clássico Boss DS-1 com controles de tone, level e distortion, som icônico do rock.',599.00,'https://cdn.awsli.com.br/600x700/2192/2192466/produto/188881670/pedal-boss-ds-1-distortion-9bmvw1rhc5.jpg',20,5);
+insert into tb_product(name, description, price, url_image, quantity_available_in_stock, category_id) values ('Bateria Acústica Pearl Export','Bateria acústica Pearl Export EXX705 com 5 peças e ferragens completas, acabamento Jet Black.',7899.99,'https://cdn.awsli.com.br/600x700/2192/2192466/produto/176415564/bateria-pearl-export-exx705-jet-black-5pcs-df4rf3yulz.jpg',6,3);
+insert into tb_product(name, description, price, url_image, quantity_available_in_stock, category_id) values ('Bateria Eletrônica Roland TD-1DMK','Bateria eletrônica Roland TD-1DMK com pads de dupla malha, sons realistas e conexão USB MIDI.',6490.00,'https://cdn.awsli.com.br/600x700/2192/2192466/produto/183170440/bateria-eletronica-roland-td-1dmk-9q5g7x4vho.jpg',10,3);
 
 -- User - password: 123456
 INSERT INTO tb_user(display_name, email, password) VALUES ('Administrador', 'admin@teste.com','$2a$10$LOqePml/koRGsk2YAIOFI.1YNKZg7EsQ5BAIuYP1nWOyYRl21dlne');

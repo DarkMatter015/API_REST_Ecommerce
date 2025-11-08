@@ -47,7 +47,7 @@ public abstract class WriteController<T, D, RD, UD, ID extends Serializable> {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
-    @PutMapping("{id}")
+    @PatchMapping("{id}")
     public ResponseEntity<RD> update(@PathVariable ID id, @RequestBody @Valid UD entityDto) {
 
         T updatedEntity = this.service.update(id, entityDto);

@@ -1,4 +1,4 @@
-package br.edu.utfpr.pb.ecommerce.server_ecommerce.error;
+package br.edu.utfpr.pb.ecommerce.server_ecommerce.handler;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;

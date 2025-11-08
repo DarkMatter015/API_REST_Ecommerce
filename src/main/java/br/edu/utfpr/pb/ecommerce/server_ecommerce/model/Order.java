@@ -22,7 +22,7 @@ public class Order {
     private Long id;
 
     @NotNull
-    private LocalDateTime data = LocalDateTime.now();
+    private final LocalDateTime data = LocalDateTime.now();
 
     @NotNull
     @ManyToOne

@@ -30,7 +30,7 @@ public class WriteOrderController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
-    @PutMapping("{id}")
+    @PatchMapping("{id}")
     public ResponseEntity<OrderResponseDTO> updateOrder(@PathVariable Long id, @RequestBody @Valid OrderUpdateDTO updateDTO) {
         Order order = orderRequestService.update(id, updateDTO);
         OrderResponseDTO responseDTO = orderMapper.toDTO(order);

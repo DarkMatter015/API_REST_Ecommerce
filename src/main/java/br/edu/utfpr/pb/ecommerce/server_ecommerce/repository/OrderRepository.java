@@ -1,6 +1,5 @@
 package br.edu.utfpr.pb.ecommerce.server_ecommerce.repository;
 
-import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.Address;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.Order;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.User;
 import org.springframework.data.domain.Page;
