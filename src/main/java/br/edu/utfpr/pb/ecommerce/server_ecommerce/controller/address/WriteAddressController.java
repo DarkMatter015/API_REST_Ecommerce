@@ -18,7 +18,7 @@ import static br.edu.utfpr.pb.ecommerce.server_ecommerce.mapper.MapperUtils.map;
 
 
 @RestController
-@RequestMapping("address")
+@RequestMapping("addresses")
 public class WriteAddressController extends WriteController<Address, AddressRequestDTO, AddressResponseDTO, AddressUpdateDTO, Long> {
     private final IAddressRequestService  addressRequestService;
     private final ModelMapper modelMapper;

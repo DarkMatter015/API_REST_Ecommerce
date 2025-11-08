@@ -81,12 +81,6 @@ public class OrderRequestServiceImpl extends CrudRequestServiceImpl<Order, Order
         User user = authService.getAuthenticatedUser();
         Order order = findAndValidateOrder(id, user);
 
-        if(updateDTO.getOrderItems() != null && !updateDTO.getOrderItems().isEmpty()) {
-            order.getOrderItems().clear();
-            List<OrderItem> newItems = getOrderItems(order, updateDTO.getOrderItems());
-            order.getOrderItems().addAll(newItems);
-        }
-
         if(updateDTO.getAddress() != null) {
             EmbeddedAddress newAddress = map(updateDTO.getAddress(), EmbeddedAddress.class, modelMapper);
             order.setAddress(newAddress);

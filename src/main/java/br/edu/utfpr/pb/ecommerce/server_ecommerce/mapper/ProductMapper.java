@@ -1,6 +1,7 @@
 package br.edu.utfpr.pb.ecommerce.server_ecommerce.mapper;
 
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.product.ProductRequestDTO;
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.exception.CategoryNotFoundException;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.Category;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.Product;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.repository.CategoryRepository;
@@ -26,7 +27,7 @@ public class ProductMapper {
         product.setQuantityAvailableInStock(dto.getQuantityAvailableInStock());
 
         Category category = categoryRepository.findById(dto.getCategoryId())
-                .orElseThrow(() -> new RuntimeException("Category not found"));
+                .orElseThrow(() -> new CategoryNotFoundException("Category not found"));
 
         product.setCategory(category);
 

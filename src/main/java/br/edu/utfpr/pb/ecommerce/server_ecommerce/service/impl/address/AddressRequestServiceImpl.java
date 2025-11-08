@@ -38,7 +38,7 @@ public class AddressRequestServiceImpl extends CrudRequestServiceImpl<Address, A
         }
     }
 
-    private Address findAndValidateAddress(Long id, User user) {
+    protected Address findAndValidateAddress(Long id, User user) {
         return addressRepository.findByIdAndUser(id, user)
                 .orElseThrow(() -> new AddressNotFoundException("Address not found."));
     }

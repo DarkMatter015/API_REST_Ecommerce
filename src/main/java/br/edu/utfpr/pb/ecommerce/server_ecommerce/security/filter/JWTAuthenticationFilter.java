@@ -44,6 +44,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         this.jwtProperties = jwtProperties;
 
         this.setAuthenticationFailureHandler(authenticationFailureHandler);
+        this.setFilterProcessesUrl("/auth/login");
     }
 
     @Override

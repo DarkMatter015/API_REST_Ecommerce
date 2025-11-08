@@ -27,7 +27,6 @@ public abstract class ReadController<T, RD, ID extends Serializable> {
         this.modelMapper = modelMapper;
     }
 
-    // protected to @Override method
     protected RD convertToDto(T entity) {
         return this.modelMapper.map(entity, this.typeDtoClass);
     }

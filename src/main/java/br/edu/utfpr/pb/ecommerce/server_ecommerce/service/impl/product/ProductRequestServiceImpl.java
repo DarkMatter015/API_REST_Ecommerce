@@ -12,7 +12,6 @@ import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.impl.CRUD.CrudRequestS
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static br.edu.utfpr.pb.ecommerce.server_ecommerce.util.ValidationUtils.validatePrice;
 import static br.edu.utfpr.pb.ecommerce.server_ecommerce.util.ValidationUtils.validateStringNullOrBlank;
 
 @Service
@@ -44,7 +43,6 @@ public class ProductRequestServiceImpl extends CrudRequestServiceImpl<Product, P
         }
 
         if (updateDTO.getPrice() != null){
-            validatePrice(updateDTO.getPrice());
             existingProduct.setPrice(updateDTO.getPrice());
         }
 

@@ -7,7 +7,6 @@ import br.edu.utfpr.pb.ecommerce.server_ecommerce.security.handler.CustomAuthent
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.AuthService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -40,16 +39,15 @@ public class WebSecurity {
     private final CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
     private final ObjectMapper objectMapper;
     private final JwtProperties jwtProperties;
+    private final Environment env;
 
-    @Autowired
-    private Environment env;
-
-    public WebSecurity(AuthService authService, AuthenticationEntryPoint authenticationEntryPoint, CustomAuthenticationFailureHandler customAuthenticationFailureHandler, ObjectMapper objectMapper, JwtProperties jwtProperties) {
+    public WebSecurity(AuthService authService, AuthenticationEntryPoint authenticationEntryPoint, CustomAuthenticationFailureHandler customAuthenticationFailureHandler, ObjectMapper objectMapper, JwtProperties jwtProperties, Environment env) {
         this.authService = authService;
         this.authenticationEntryPoint = authenticationEntryPoint;
         this.customAuthenticationFailureHandler = customAuthenticationFailureHandler;
         this.objectMapper = objectMapper;
         this.jwtProperties = jwtProperties;
+        this.env = env;
     }
 
     @Bean

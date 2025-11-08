@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("address")
+@RequestMapping("addresses")
 public class ReadAddressController extends ReadController<Address, AddressResponseDTO, Long> {
 
     public ReadAddressController(IAddressResponseService addressResponseService, ModelMapper modelMapper) {
