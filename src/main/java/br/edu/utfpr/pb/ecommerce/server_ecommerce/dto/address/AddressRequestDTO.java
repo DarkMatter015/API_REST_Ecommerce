@@ -21,6 +21,7 @@ public class AddressRequestDTO {
 
     private String complement;
 
+    @NotBlank
     private String neighborhood;
 
     @NotBlank

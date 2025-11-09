@@ -10,26 +10,24 @@ import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import static br.edu.utfpr.pb.ecommerce.server_ecommerce.mapper.MapperUtils.map;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("orderItems")
 public class WriteOrderItemsController extends WriteController<OrderItem, OrderItemRequestDTO, OrderItemResponseDTO, OrderItemUpdateDTO, Long> {
     private final OrderItemsRequestServiceImpl orderItemsRequestService;
-    private final ModelMapper modelMapper;
 
     public WriteOrderItemsController(OrderItemsRequestServiceImpl orderItemsRequestService, ModelMapper modelMapper) {
         super(orderItemsRequestService, modelMapper, OrderItem.class, OrderItemResponseDTO.class);
         this.orderItemsRequestService = orderItemsRequestService;
-        this.modelMapper = modelMapper;
     }
 
     @Override
     public ResponseEntity<OrderItemResponseDTO> create(@RequestBody @Valid OrderItemRequestDTO dto) {
         OrderItem itemSalvo = orderItemsRequestService.createOrderItem(dto);
-        OrderItemResponseDTO response = map(itemSalvo, OrderItemResponseDTO.class, modelMapper);
+        OrderItemResponseDTO response = convertToResponseDto(itemSalvo);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 

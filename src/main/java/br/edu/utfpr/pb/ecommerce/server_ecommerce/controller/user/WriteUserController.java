@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static br.edu.utfpr.pb.ecommerce.server_ecommerce.mapper.MapperUtils.map;
-
 
 @RestController
 @RequestMapping("users")
@@ -32,7 +30,7 @@ public class WriteUserController extends WriteController<User, UserRequestDTO, U
     @Override
     public ResponseEntity<UserResponseDTO> create(@RequestBody @Valid UserRequestDTO userRequestDTO) {
         User user = iUserRequestService.createUser(userRequestDTO);
-        UserResponseDTO responseDTO = map(user, UserResponseDTO.class, modelMapper);
+        UserResponseDTO responseDTO = convertToResponseDto(user);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
@@ -40,7 +38,7 @@ public class WriteUserController extends WriteController<User, UserRequestDTO, U
     @Override
     public ResponseEntity<UserResponseDTO> update(@PathVariable Long id, @RequestBody @Valid UserUpdateDTO updateDTO) {
         User user = iUserRequestService.update(id, updateDTO);
-        UserResponseDTO responseDTO = map(user, UserResponseDTO.class, modelMapper);
+        UserResponseDTO responseDTO = convertToResponseDto(user);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }

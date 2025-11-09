@@ -197,7 +197,6 @@ Durante o desenvolvimento deste projeto, pude consolidar e aprofundar meus conhe
 - 🔸 Implementar **refresh token JWT**  
 - 🔸 Testes unitários e de integração (JUnit + Mockito)  
 - 🔸 Adicionar **Dockerfile** e `docker-compose.yml`  
-- 🔸 Adicionar **Dockerfile** e `docker-compose.yml`  
 - 🔸 Deploy em **Render** ou **Railway**
 
 ---
