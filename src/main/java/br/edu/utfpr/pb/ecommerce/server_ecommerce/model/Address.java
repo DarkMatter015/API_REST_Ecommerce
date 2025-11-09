@@ -34,6 +34,7 @@ public class Address {
 
     private String complement;
 
+    @NotBlank
     private String neighborhood;
 
     @NotBlank
