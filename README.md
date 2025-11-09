@@ -1,4 +1,4 @@
-# 🧠 RiffHouse API — E-commerce RESTful com Java Spring Boot
+# 🧠 RiffHouse API — E-commerce REST com Java Spring Boot
 
 API REST desenvolvida em **Java + Spring Boot**, responsável por gerenciar produtos, usuários e pedidos da plataforma **RiffHouse** — um e-commerce de instrumentos musicais.  
 Projetada com foco em **boas práticas de arquitetura, segurança e integração**, esta API constitui o **back-end** do projeto Full Stack RiffHouse.
