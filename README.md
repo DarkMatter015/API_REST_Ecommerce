@@ -5,6 +5,12 @@ Projetada com foco em **boas práticas de arquitetura, segurança e integração
 
 ---
 
+## 🎥 Demonstração do Projeto
+
+[![Assista à demonstração no YouTube](https://img.youtube.com/vi/mJQsdfpHpg4/0.jpg)](https://youtu.be/mJQsdfpHpg4)
+
+---
+
 ## 🚀 Tecnologias e Dependências Principais
 
 ![Java](https://img.shields.io/badge/Java-21-orange)
