@@ -20,7 +20,6 @@ Projetada com foco em **boas práticas de arquitetura, segurança e integração
   - Spring Validation  
   - Spring Security  
 - **PostgreSQL / H2 Database**
-- **Jakarta Validation**
 - **Lombok**
 - **JWT Authentication**
 - **ModelMapper**
