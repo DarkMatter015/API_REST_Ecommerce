@@ -2,7 +2,6 @@ package br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.order;
 
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.address.AddressRequestDTO;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.orderItem.OrderItemRequestDTO;
-import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.payment.PaymentRequestDTO;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
