@@ -168,7 +168,10 @@ cd server-ecommerce
 A API é consumida pela aplicação **RiffHouse Web**, desenvolvida em **React + Vite**.  
 📦 Repositório front-end: [RiffHouse Web (React)](https://github.com/DarkMatter015/client-ecommerce)
 
-## 🧪 [Testes de API no Postman](./postman/README_Postman.md)
+## 🧪 Testes de API no Postman
+
+🔗 [Testes de API no Postman](./postman/README_Postman.md)
+
 ---
 
 ## 🧠 Aprendizados e Desafios Técnicos
