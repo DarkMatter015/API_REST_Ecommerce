@@ -40,6 +40,6 @@ public class WriteUserController extends WriteController<User, UserRequestDTO, U
         User user = iUserRequestService.update(id, updateDTO);
         UserResponseDTO responseDTO = convertToResponseDto(user);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
     }
 }
