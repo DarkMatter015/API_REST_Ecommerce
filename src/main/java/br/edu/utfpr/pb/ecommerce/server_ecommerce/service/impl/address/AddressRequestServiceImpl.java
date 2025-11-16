@@ -3,12 +3,16 @@ package br.edu.utfpr.pb.ecommerce.server_ecommerce.service.impl.address;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.address.AddressRequestDTO;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.address.AddressUpdateDTO;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.exception.AddressNotFoundException;
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.exception.CepNotFoundException;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.Address;
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.AddressCEP;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.User;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.repository.AddressRepository;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.AuthService;
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.CepService;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.IAddress.IAddressRequestService;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.impl.CRUD.CrudRequestServiceImpl;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import static br.edu.utfpr.pb.ecommerce.server_ecommerce.mapper.MapperUtils.map;
 import static br.edu.utfpr.pb.ecommerce.server_ecommerce.util.ValidationUtils.validateStringNullOrBlank;
 
 @Service
@@ -24,11 +29,15 @@ public class AddressRequestServiceImpl extends CrudRequestServiceImpl<Address, A
 
     private final AddressRepository addressRepository;
     private final AuthService  authService;
+    private final ModelMapper modelMapper;
+    private final CepService cepService;
 
-    public AddressRequestServiceImpl(AddressRepository addressRepository, AuthService authService) {
+    public AddressRequestServiceImpl(AddressRepository addressRepository, AuthService authService, ModelMapper modelMapper, CepService cepService) {
         super(addressRepository);
         this.addressRepository = addressRepository;
         this.authService = authService;
+        this.modelMapper = modelMapper;
+        this.cepService = cepService;
     }
 
     private void validateAddressOwnership(Address address) {
@@ -46,18 +55,20 @@ public class AddressRequestServiceImpl extends CrudRequestServiceImpl<Address, A
     @Override
     @Transactional
     public Address createAddress(AddressRequestDTO addressDTO) {
-        Address address = new Address();
 
+        AddressCEP cepData;
+        try {
+            cepData = cepService.getAddressByCEP(addressDTO.getCep());
+        } catch (Exception e) {
+            throw new CepNotFoundException("CEP not found or invalid.");
+        }
+
+        Address address = map(cepData, Address.class, modelMapper);
+        address.setNumber(addressDTO.getNumber());
+        address.setComplement(addressDTO.getComplement());
         User user = authService.getAuthenticatedUser();
 
         address.setUser(user);
-        address.setStreet(addressDTO.getStreet());
-        address.setNumber(addressDTO.getNumber());
-        address.setComplement(addressDTO.getComplement());
-        address.setNeighborhood(addressDTO.getNeighborhood());
-        address.setCity(addressDTO.getCity());
-        address.setState(addressDTO.getState());
-        address.setCep(addressDTO.getCep());
 
         return super.save(address);
     }
@@ -83,11 +94,6 @@ public class AddressRequestServiceImpl extends CrudRequestServiceImpl<Address, A
         User user = authService.getAuthenticatedUser();
         Address address = findAndValidateAddress(id, user);
 
-        if(updateDTO.getStreet() != null) {
-            validateStringNullOrBlank(updateDTO.getStreet());
-            address.setStreet(updateDTO.getStreet());
-        }
-
         if(updateDTO.getNumber() != null) {
             validateStringNullOrBlank(updateDTO.getNumber());
             address.setNumber(updateDTO.getNumber());
@@ -96,26 +102,6 @@ public class AddressRequestServiceImpl extends CrudRequestServiceImpl<Address, A
         if(updateDTO.getComplement() != null) {
             validateStringNullOrBlank(updateDTO.getComplement());
             address.setComplement(updateDTO.getComplement());
-        }
-
-        if(updateDTO.getNeighborhood() != null) {
-            validateStringNullOrBlank(updateDTO.getNeighborhood());
-            address.setNeighborhood(updateDTO.getNeighborhood());
-        }
-
-        if(updateDTO.getCity() != null) {
-            validateStringNullOrBlank(updateDTO.getCity());
-            address.setCity(updateDTO.getCity());
-        }
-
-        if(updateDTO.getState() != null) {
-            validateStringNullOrBlank(updateDTO.getState());
-            address.setState(updateDTO.getState());
-        }
-
-        if(updateDTO.getCep() != null) {
-            validateStringNullOrBlank(updateDTO.getCep());
-            address.setCep(updateDTO.getCep());
         }
 
         return addressRepository.save(address);
