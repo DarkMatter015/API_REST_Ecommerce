@@ -25,9 +25,6 @@ public class APITest {
     private TestRestTemplate testRestTemplate;
 
     @Autowired
-    private ProductRepository productRepository;
-
-    @Autowired
     private UserRepository userRepository;
 
     private User authenticatedUser;
@@ -101,9 +98,6 @@ public class APITest {
         String token = obtainAccessToken("Test", "123");
 
         AddressRequestDTO address = new AddressRequestDTO();
-        address.setStreet("Rua Nova");
-        address.setCity("Pato Branco");
-        address.setState("PR");
         address.setCep("85501-000");
 
         ResponseEntity<Object> response =

@@ -16,11 +16,13 @@ import java.util.Set;
 @AllArgsConstructor
 public class SecurityUserResponseDTO {
 
+    private Long id;
     private String email;
     private String displayName;
     private Set<AuthorityResponseDTO> authorities;
 
     public SecurityUserResponseDTO(User user) {
+        this.id = user.getId();
         this.email = user.getEmail();
         this.displayName = user.getDisplayName();
         this.authorities = new HashSet<>();
