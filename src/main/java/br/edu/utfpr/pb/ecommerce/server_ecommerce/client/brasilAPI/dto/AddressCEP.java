@@ -1,4 +1,4 @@
-package br.edu.utfpr.pb.ecommerce.server_ecommerce.model;
+package br.edu.utfpr.pb.ecommerce.server_ecommerce.client.brasilAPI.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

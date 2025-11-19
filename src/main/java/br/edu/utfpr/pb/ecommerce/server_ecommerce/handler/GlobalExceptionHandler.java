@@ -1,7 +1,9 @@
 package br.edu.utfpr.pb.ecommerce.server_ecommerce.handler;
 
+import feign.FeignException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -43,5 +45,23 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST.value(),
                 request.getServletPath(),
                 errors);
+    }
+
+    @ExceptionHandler(FeignException.class)
+    public ResponseEntity<ApiError> handleFeignException(FeignException exception,
+                                                         HttpServletRequest request) {
+
+        int status = exception.status() != -1
+                ? exception.status()
+                : HttpStatus.BAD_REQUEST.value();
+
+        ApiError error = new ApiError(
+                "Error to call External API (MelhorEnvio)",
+                status,
+                request.getServletPath(),
+                Map.of("detail", exception.getMessage())
+        );
+
+        return ResponseEntity.status(status).body(error);
     }
 }

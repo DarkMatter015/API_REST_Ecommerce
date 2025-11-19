@@ -1,8 +1,8 @@
-package br.edu.utfpr.pb.ecommerce.server_ecommerce.controller.cep;
+package br.edu.utfpr.pb.ecommerce.server_ecommerce.client.brasilAPI.controller;
 
-import br.edu.utfpr.pb.ecommerce.server_ecommerce.exception.CepNotFoundException;
-import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.AddressCEP;
-import br.edu.utfpr.pb.ecommerce.server_ecommerce.service.CepService;
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.client.brasilAPI.exception.CepNotFoundException;
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.client.brasilAPI.dto.AddressCEP;
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.client.brasilAPI.service.CepService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
