@@ -13,6 +13,5 @@ public class CepService {
 
     public AddressCEP getAddressByCEP(String cep) {
             return brasilApi.getAddressByCEP(cep);
-
     }
 }

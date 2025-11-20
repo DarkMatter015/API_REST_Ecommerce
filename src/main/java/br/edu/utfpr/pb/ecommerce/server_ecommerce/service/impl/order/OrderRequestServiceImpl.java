@@ -1,11 +1,14 @@
 package br.edu.utfpr.pb.ecommerce.server_ecommerce.service.impl.order;
 
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.client.brasilAPI.dto.AddressCEP;
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.client.brasilAPI.service.CepService;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.order.OrderRequestDTO;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.order.OrderUpdateDTO;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.dto.orderItem.OrderItemRequestDTO;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.exception.OrderNotFoundException;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.exception.PaymentNotFoundException;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.exception.ProductNotFoundException;
+import br.edu.utfpr.pb.ecommerce.server_ecommerce.mapper.AddressMapper;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.model.*;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.repository.OrderRepository;
 import br.edu.utfpr.pb.ecommerce.server_ecommerce.repository.PaymentRepository;
@@ -32,14 +35,18 @@ public class OrderRequestServiceImpl extends CrudRequestServiceImpl<Order, Order
     private final PaymentRepository paymentRepository;
     private final AuthService authService;
     private final ModelMapper modelMapper;
+    private final CepService cepService;
+    private final AddressMapper addressMapper;
 
-    public OrderRequestServiceImpl(OrderRepository orderRepository, ProductRepository productRepository, PaymentRepository paymentRepository, AuthService authService, ModelMapper modelMapper) {
+    public OrderRequestServiceImpl(OrderRepository orderRepository, ProductRepository productRepository, PaymentRepository paymentRepository, AuthService authService, ModelMapper modelMapper, CepService cepService, AddressMapper addressMapper) {
         super(orderRepository);
         this.orderRepository = orderRepository;
         this.productRepository = productRepository;
         this.paymentRepository = paymentRepository;
         this.authService = authService;
         this.modelMapper = modelMapper;
+        this.cepService = cepService;
+        this.addressMapper = addressMapper;
     }
 
     private Order findAndValidateOrder(Long id, User user) {
@@ -96,8 +103,9 @@ public class OrderRequestServiceImpl extends CrudRequestServiceImpl<Order, Order
         User user = authService.getAuthenticatedUser();
         order.setUser(user);
 
-        EmbeddedAddress address = map(dto.getAddress(), EmbeddedAddress.class, modelMapper);
-        order.setAddress(address);
+        AddressCEP addressCEP = cepService.getAddressByCEP(dto.getAddress().getCep());
+        EmbeddedAddress embeddedAddress = addressMapper.toEmbeddedAddress(addressCEP, dto.getAddress());
+        order.setAddress(embeddedAddress);
 
         List<OrderItem> itens = getOrderItems(order, dto.getOrderItems());
 
