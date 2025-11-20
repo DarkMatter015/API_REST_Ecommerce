@@ -13,10 +13,11 @@ import java.util.List;
 @AllArgsConstructor
 public class ShipmentRequestDTO {
 
-    @NotNull
     private PostalCodeRequest from;
+
     @NotNull
     private PostalCodeRequest to;
+
     @NotEmpty
     private List<ShipmentProductRequest> products;
 }
